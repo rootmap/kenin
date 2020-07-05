@@ -336,6 +336,9 @@ label {
   background-color: #ffffff;
   border: 1px solid #cccccc;
 }
+.w-width100 {
+  width: 100px;
+}
 .w-input:-moz-placeholder,
 .w-select:-moz-placeholder {
   color: #999;
