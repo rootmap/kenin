@@ -10,11 +10,10 @@ $fotter_menu=$info['fotter_menu'];
 <html data-wf-page="5efce875ff35ce820d7ff59a" data-wf-site="5efce87596038b5613cd3b66">
 <head>
     @include('front-end.extra.head')
-    
     @yield('css')
 </head>
 <body>
-    <main id="main" class="banner">
+    <main id="Main" class="header-section utility-pages">
         @include('front-end.extra.navbar')
         @yield('slider')
     </main>

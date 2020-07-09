@@ -1,16 +1,16 @@
 <meta charset="utf-8">
-<title>Shelter - Webflow HTML5 Hotel Template</title>
-<meta content="Shelter is an elegant and modern HTML5 Template suitable for hotels, resorts, villas, or any kind of website in the hotel industry. It comes with a banner that makes it even more eye-catchy." name="description">
-<meta content="Shelter - Webflow HTML5 Hotel Template" property="og:title">
-<meta content="Shelter is an elegant and modern HTML5 Template suitable for hotels, resorts, villas, or any kind of website in the hotel industry. It comes with a banner that makes it even more eye-catchy." property="og:description">
-<meta content="{{asset('site/images/5e1326c04b55b0a0a241ad2e_Weblow-Template-Presentation---Shelter---Open-Graph-Image-1200x630.png')}}" property="og:image">
-<meta content="Shelter - Webflow HTML5 Hotel Template" property="twitter:title">
-<meta content="Shelter is an elegant and modern HTML5 Template suitable for hotels, resorts, villas, or any kind of website in the hotel industry. It comes with a banner that makes it even more eye-catchy." property="twitter:description">
-<meta content="{{asset('site/images/5e1326c04b55b0a0a241ad2e_Weblow-Template-Presentation---Shelter---Open-Graph-Image-1200x630.png')}}" property="twitter:image">
+<title>{{$site->site_name}} - {{$site->site_title}}</title>
+<meta content="{{$site->site_description}}" name="description">
+<meta content="{{$site->site_title}}" property="og:title">
+<meta content="{{$site->site_description}}" property="og:description">
+<meta content="{{asset('upload/sitesetting/'.$site->site_logo)}}" property="og:image">
+<meta content="{{$site->site_title}}" property="twitter:title">
+<meta content="{{$site->site_description}}" property="twitter:description">
+<meta content="{{asset('upload/sitesetting/'.$site->site_logo)}}" property="twitter:image">
 <meta property="og:type" content="website">
 <meta content="summary_large_image" name="twitter:card">
 <meta content="width=device-width, initial-scale=1" name="viewport">
-<meta content="Webflow" name="generator">
+<meta content="Neutrix.Systems" name="generator">
 <link href="{{asset('site/css/normalize.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset('site/css/webflow.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset('site/css/kenin.webflow.css')}}" rel="stylesheet" type="text/css">

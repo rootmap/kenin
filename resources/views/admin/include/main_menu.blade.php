@@ -37,6 +37,29 @@
               <p>Dashboard</p>
             </a>
           </li>
+          <li class="nav-item has-treeview {{ in_array(Request::path(),array('bookingrequest/create','bookingrequest'))?'menu-open':'' }}">
+            <a href="#" class="nav-link {{ in_array(Request::path(),array('bookingrequest/create','bookingrequest'))?'active':'' }}">
+              <i class="nav-icon fas fa-images"></i>
+              <p>
+                Booking
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{url('bookingrequest/create')}}" class="nav-link {{ Request::path() == 'bookingrequest/create' ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>New Booking</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{url('bookingrequest')}}" class="nav-link {{ Request::path() == 'bookingrequest' ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Booking List</p>
+                </a>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item">
             <a href="{{url('slider')}}" class="nav-link {{ Request::path() == 'slider' ? 'active' : '' }}">
               <i class="nav-icon fas fa-igloo"></i>
@@ -100,6 +123,7 @@
               </li>
             </ul>
           </li>
+          
 
 
           <li class="nav-item has-treeview {{ in_array(Request::path(),array('roominfo','roomdetail'))?'menu-open':'' }}">

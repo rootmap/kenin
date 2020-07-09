@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\URL;
 
 use App\PageName;
 use App\SiteSetting;
+use App\TopMenu;
+use App\FotterMenu;
 
 class CoreCustomController extends Facade {
 
@@ -35,7 +37,7 @@ class CoreCustomController extends Facade {
 
     public static function storeName() 
     {
-        return "Advantage-Lending";
+        return "Kenin";
     }
 
     public static function UserID() 
@@ -53,11 +55,14 @@ class CoreCustomController extends Facade {
         return 'Admin';
     }    
 
-    public static function SiteSetting()
+    public static function siteInfo()
     {
 
         $SiteSetting=SiteSetting::orderBy('id','DESC')->first();
-        return $SiteSetting;
+        $topMenu=TopMenu::where('module_status','Active')->orderBy('menu_position','ASC')->get();
+        $fotterMenu=FotterMenu::where('module_status','Active')->orderBy('menu_position','ASC')->get();
+        $data=['site'=>$SiteSetting,'top_menu'=>$topMenu,'fotter_menu'=>$fotterMenu];
+        return $data;
 
 
     }

@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\FrontService;
-use App\ContactMeAbout;
-use App\ContactRequest;
-use App\CaseType;
-use App\USAState;
-use App\NeedAnAttorney;
 use App\AdminLog;
-use App\ApplicationForm;
+use App\SiteSetting;
+use App\Slider;
+use App\DreamContent;
+use App\VideosContent;
+use App\ExploreShelterInfo;
+use App\ShelterPhoto;
+use App\PeopleAndStory;
+use App\peopleFeedback;
+use App\RoomInfo;
+use App\RoomDetail;
+use App\FotterPageContent;
+use App\FotterMenu;
+
 use Illuminate\Http\Request;
 
 class FrontServiceController extends Controller
@@ -42,155 +48,44 @@ class FrontServiceController extends Controller
         $tab->save();
     }
 
-    public function contactus(Request $request){
-        $validator = \Validator::make($request->all(), [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'contact_about_id' => 'required',
-            'state_case_id' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
-            'message' => 'required',
-        ]);
-
-        if (!$validator->passes()) {
-            return response()->json(['status'=>0, 'msg' => 'Please Enter all required (*) field','error'=> $validator->errors()->all()]);
-        }
-
-        $this->SystemAdminLog("User Contact Us Request Submitted", "Save New", "Create New");
-
-
-        
-
-        $tab_2_ContactMeAbout = ContactMeAbout::where('id', $request->contact_about_id)->first();
-        $contact_about_2_ContactMeAbout = $tab_2_ContactMeAbout->name;
-        $tab_3_USAState = USAState::where('id', $request->state_case_id)->first();
-        $state_case_3_USAState = $tab_3_USAState->name;
-
-        $tab = new ContactRequest();
-        $tab->first_name = $request->first_name;
-        $tab->last_name = $request->last_name;
-        $tab->contact_about_Reviewed = $contact_about_2_ContactMeAbout;
-        $tab->contact_about = $request->contact_about_id;
-        $tab->state_case_name = $state_case_3_USAState;
-        $tab->state_case = $request->state_case_id;
-        $tab->phone = $request->phone;
-        $tab->email = $request->email;
-        $tab->message = $request->message;
-        $tab->save();
-
-        return response()->json(['status' => 1, 'msg' => 'Your contact request submitted successfully.']);
+    public function booking($arrival='',$departure='',$adult='',$children=''){
+        $slider=Slider::orderBy('id','DESC')->first();
+        return view('front-end.pages.booking',['slider'=>$slider]);
     }
 
-    public function needAnAttorNey(Request $request)
-    {
-        $validator = \Validator::make($request->all(), [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'case_type' => 'required',
-            'state_case' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
-            'message' => 'required',
-        ]);
-
-        if (!$validator->passes()) {
-            return response()->json(['status' => 0, 'msg' => 'Please Enter all required (*) field', 'error' => $validator->errors()->all()]);
-        }
-
-        $this->SystemAdminLog("User Need Attorney Request Submitted", "Save New", "Create New");
-
-
-        $tab_2_CaseType = CaseType::where('id', $request->case_type)->first();
-        $case_type_2_CaseType = $tab_2_CaseType->name;
-        
-        $tab_3_USAState = USAState::where('id', $request->state_case)->first();
-        $state_case_3_USAState = $tab_3_USAState->name;
-        
-        $tab = new NeedAnAttorney();
-        $tab->first_name = $request->first_name;
-        $tab->last_name = $request->last_name;
-        $tab->case_type_name = $case_type_2_CaseType;
-        $tab->case_type = $request->case_type;
-        $tab->state_case_name = $state_case_3_USAState;
-        $tab->state_case = $request->state_case;
-        $tab->phone = $request->phone;
-        $tab->email = $request->email;
-        $tab->message = $request->message;
-        $tab->request_status = "Submitted";
-        $tab->save();
-
-        return response()->json(['status' => 1, 'msg' => 'Your attorney request submitted successfully. Support team will contact with you soon.']);
-    } 
-
-    public function index()
-    {
-        //
+    public function pages($pages=''){
+        $FotterMenu=FotterMenu::where('menu_link',$pages)->first();
+        $pageID=$FotterMenu->id;
+        //dd($FotterMenu);
+        $FotterPageContent=FotterPageContent::where('page_name',$pageID)->orderBy('id','ASC')->get();
+        //dd($FotterPageContent);
+        return view('front-end.pages.pages',['page'=>$FotterPageContent]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function index(){
+        $SiteSetting=SiteSetting::orderBy('id','DESC')->first();
+        $slider=Slider::orderBy('id','DESC')->first();
+        $dreamContent=DreamContent::orderBy('id','DESC')->first();
+        $videosContent=VideosContent::orderBy('id','DESC')->first();
+        $exploreShelterInfo=ExploreShelterInfo::orderBy('id','DESC')->first();
+        $peopleAndStory=PeopleAndStory::orderBy('id','DESC')->first();
+        $RoomInfo=RoomInfo::orderBy('id','DESC')->first();
+        $shelterPhoto=ShelterPhoto::where('module_status','Active')->orderBy('id','DESC')->get();
+        $PeopleFeedback=PeopleFeedback::where('module_status','Active')->orderBy('id','DESC')->get();
+        $RoomDetail=RoomDetail::where('module_status','Active')->orderBy('id','DESC')->get();
+        $data=[
+            'site'=>$SiteSetting,
+            'dream'=>$dreamContent,
+            'slider'=>$slider,
+            'video'=>$videosContent,
+            'shelter'=>$exploreShelterInfo,
+            'shelterPhoto'=>$shelterPhoto,
+            'peopleAndStory'=>$peopleAndStory,
+            'peopleFeedback'=>$PeopleFeedback,
+            'roomInfo'=>$RoomInfo,
+            'roomDetail'=>$RoomDetail,
+        ];
+        return view('front-end.pages.index',$data);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\FrontService  $frontService
-     * @return \Illuminate\Http\Response
-     */
-    public function show(FrontService $frontService)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\FrontService  $frontService
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(FrontService $frontService)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\FrontService  $frontService
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, FrontService $frontService)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\FrontService  $frontService
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(FrontService $frontService)
-    {
-        //
-    }
+    
 }
