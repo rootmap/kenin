@@ -126,8 +126,8 @@
           
 
 
-          <li class="nav-item has-treeview {{ in_array(Request::path(),array('roominfo','roomdetail'))?'menu-open':'' }}">
-            <a href="#" class="nav-link {{ in_array(Request::path(),array('roominfo','roomdetail'))?'active':'' }}">
+          <li class="nav-item has-treeview {{ in_array(Request::path(),array('roominfo','roomdetail','room'))?'menu-open':'' }}">
+            <a href="#" class="nav-link {{ in_array(Request::path(),array('roominfo','roomdetail','room'))?'active':'' }}">
               <i class="nav-icon fas fa-table"></i>
               <p>
                 Room Info
@@ -144,7 +144,13 @@
               <li class="nav-item">
                 <a href="{{url('roomdetail')}}" class="nav-link {{ Request::path() == 'roomdetail' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Room Details</p>
+                  <p>Site Room Details</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{url('room')}}" class="nav-link {{ Request::path() == 'room' ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Booking Room Details</p>
                 </a>
               </li>
               

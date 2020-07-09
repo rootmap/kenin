@@ -259,3 +259,48 @@
     {!!$site->site_map!!}
 </section>
 @endsection
+
+@section('js')
+    <script>
+
+      $(document).ready(function(){
+          $.getScript("https://cdn.jsdelivr.net/npm/sweetalert2@9");
+
+          $(".main-book-now-button").click(function(){
+              Swal.showLoading ();
+              var arival_date=$("#datetimepicker").val();
+              var departure_date=$("#datetimepicker2").val();
+
+              var lg_Adults=$("select[name='lg_Adults']").val();
+              var lg_Children=$("select[name='lg_Children']").val();
+
+              if(arival_date.length==0)
+              {
+                  Swal.fire({
+                      icon: 'error',
+                      title: '<h3 class="text-danger">Warning</h3>',
+                      html: '<h5>Please Select Arrival Date!!!</h5>'
+                  });
+                  return false;
+              }
+
+              if(departure_date.length==0)
+              {
+                  Swal.fire({
+                      icon: 'error',
+                      title: '<h3 class="text-danger">Warning</h3>',
+                      html: '<h5>Please Select Departure Date!!!</h5>'
+                  });
+                  return false;
+              }
+
+              window.location.href="{{url('booking')}}/"+arival_date+"/"+departure_date+"/"+lg_Adults+"/"+lg_Children;
+
+              //alert('working');
+          });
+
+      });
+
+        
+    </script>
+@endsection

@@ -49,8 +49,9 @@ class FrontServiceController extends Controller
     }
 
     public function booking($arrival='',$departure='',$adult='',$children=''){
+
         $slider=Slider::orderBy('id','DESC')->first();
-        return view('front-end.pages.booking',['slider'=>$slider]);
+        return view('front-end.pages.booking',['slider'=>$slider,'arrival'=>$arrival,'departure'=>$departure,'adult'=>$adult,'children'=>$children]);
     }
 
     public function pages($pages=''){
