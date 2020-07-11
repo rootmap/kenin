@@ -357,50 +357,78 @@
 
     </section>
     <section style="margin-top: 50px;">
-        <?php $loop=5; $ii=1;  ?>
-        @for ($i = 0; $i <$loop; $i++)
-
-        @if ($ii==1)
-        <div class="w-container benefits " style="margin-top:0px;">
-        @endif
-
-        <div class="w-small-3">
-            <div class="product-card" style="margin: 5px;">
-                <div class="badge">Hot</div>
-                <div class="product-tumb">
-                    <img src="https://i.imgur.com/xdbHo4E.png" alt="">
-                </div>
-                <div class="product-details">
-                    <span class="product-catagory">Women,bag</span>
-                    <h4><a href="">Women leather bag</a></h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, possimus nostrum!</p>
-                    <div class="product-bottom-details">
-                        <div class="product-price">$230.99</div>
-                        <div class="product-links">
-                            <a href="" style="color:#fbb72c; font-weight: bolder;"><i class="fa fa-shopping-cart"></i> Book Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        @if ($i==$loop && $ii==3)
-            </div>
-        @elseif($ii==3)
-            </div>
-        @endif
-
-
-
-        <?php  
-        if($ii==3){
-            $ii=0;
-        }
-        $ii++; 
         
-        ?>
 
-        @endfor
+        <?php $loop=count($room); $ii=1; $i=1;  ?>
+        @isset($room)
+            @foreach ($room as $row)
+            @if ($ii==1)
+                <div class="w-container benefits " style="margin-top:0px;">
+            @endif
+                        <div class="w-col">
+                            <div class="product-card" style="margin: 5px;">
+                                <div class="badge">Available</div>
+                                <div class="product-tumb">
+                                    <img src="{{asset('upload/room/'.$row->room_photo)}}" alt="">
+                                </div>
+                                <div class="product-details">
+                                    <span class="product-catagory">{{$row->room_size}}</span>
+                                    <h4><a href="">{{$row->room_name}}</a></h4>
+                                    <p style="min-height: 60px;">
+                                        <?php 
+                                            $feature=$row->room_feature;    
+                                            $featureArray=explode(",",$feature);
+                                            $k=1;
+                                            foreach ($featureArray as $key => $val) {
+                                                ?>
+                                                <i class="fa fa-check" aria-hidden="true"></i> {{$val}} 
+                                                <?php 
+                                                if($k==5){ break; } 
+                                                $k++;
+                                            }
+                                        ?>.....
+                                    </p>
+                                    <p style="min-height: 60px;">
+                                        <?php 
+                                            $room_service=$row->room_service;    
+                                            $room_serviceArray=explode(",",$room_service);
+                                            $k=1;
+                                            foreach ($room_serviceArray as $key => $val) {
+                                                ?>
+                                                <i class="fa fa-dot-circle-o" aria-hidden="true"></i> {{$val}} 
+                                                <?php
+                                                if($k==5){ break; } 
+                                                $k++;
+                                            }
+                                        ?>....
+                                    </p>
+                                    <div class="product-bottom-details">
+                                        <div class="product-price">${{$row->room_price}}</div>
+                                        <div class="product-links">
+                                            <a href="{{url('/booking-item/'.$row->id.'/'.$arrival.'/'.$departure.'/'.$adult.'/'.$children)}}" style="color:#fbb72c; font-weight: bolder;"><i class="fa fa-shopping-cart"></i> Book Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            @if ($i==count($room))
+                </div>
+            @elseif($ii==3)
+                </div>
+            @endif
+
+            <?php 
+            if($ii==3)
+            {
+                $ii=0;
+            }
+            
+            $ii++; $i++; 
+            
+            ?>
+
+            @endforeach
+        @endisset
     
                     
                         

@@ -22,6 +22,7 @@
 <link href="{{asset('site/images/favicon.png')}}" rel="shortcut icon" type="image/x-icon">
 <link href="{{asset('site/images/webclip.png')}}" rel="apple-touch-icon">
 <script src="{{asset('site/js/jquery.min.js')}}"></script>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <style type="text/css">
 	.top-buffer {
 		margin-top: 50px;

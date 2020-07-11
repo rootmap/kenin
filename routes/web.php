@@ -15,6 +15,8 @@
 Route::get('/','FrontServiceController@index')->name('index');
 Route::get('/pages/{page?}','FrontServiceController@pages');
 Route::get('/booking/{arrival}/{departure}/{adult}/{children}','FrontServiceController@booking');
+Route::post('/booking','FrontServiceController@bookingConfirm');
+Route::get('/booking-item/{room}/{arrival}/{departure}/{adult}/{children}','FrontServiceController@bookingRoom');
 
 Auth::routes();
 
