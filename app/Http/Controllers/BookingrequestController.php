@@ -6,6 +6,7 @@ use App\BookingRequest;
 use App\AdminLog;
 use Illuminate\Http\Request;
 use App\Room;
+use App\BookingConfiguration;
                 
 
 class BookingRequestController extends Controller
@@ -352,6 +353,145 @@ class BookingRequestController extends Controller
      * @param  \App\BookingRequest  $bookingrequest
      * @return \Illuminate\Http\Response
      */
+
+    private function bookingTemplate($booking, $room){
+
+
+        $siteMessage='  <h2>
+                            <strong><span style="color: #ff9900;">Room Reservation Detail</span></strong>
+                        </h2>
+
+                        <table style="border: 2px solid #000000; width: 436px;">
+
+                        <tbody>
+
+                        <tr style="height: 32px;">
+
+                        <td style="width: 184px; height: 32px;">Reservation Created</td>
+
+                        <td style="width: 244px; height: 32px;">&nbsp;'.date('dS M Y, h:i A').'</td>
+
+                        </tr>
+
+                        <tr style="height: 46px;">
+
+                        <td style="width: 428px; height: 46px;" colspan="2">
+
+                        <h3 style="display: block; width: 80%; border-bottom: 3px #000 solid;"><strong>Reservation Detail</strong></h3>
+
+                        </td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Room Name</td>
+
+                        <td style="width: 244px; height: 18px;">'.$room->room_name.' ('.$room->room_size.')</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Room Quantity</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->room_quantity.'</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Booking From</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->booking_from.'</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Booking Status</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->booking_status.'</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Name</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->customer_name.'</td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Email&nbsp;</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->customer_email.'</td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Phone&nbsp;</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->customer_phone.'</td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Address&nbsp;</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->customer_address.'</td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Reservation Date</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->reservation_date.'</td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Arrival Date</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->arrival_date.'</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Departure Date</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->departure_date.'</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Adults</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->adults.'</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Children</td>
+
+                        <td style="width: 244px; height: 18px;">'.$booking->children.'</td>
+
+                        </tr>
+                        </tbody>
+
+                        </table>
+
+                        <p>Kind Regards, '.$this->sdc->SiteName.'&nbsp;</p>
+
+                        <p>&nbsp;</p>';
+
+        return $siteMessage;
+    }
+
+
+
     public function update(Request $request, BookingRequest $bookingrequest,$id=0)
     {
         $this->validate($request,[
@@ -392,7 +532,23 @@ class BookingRequestController extends Controller
         $tab->booking_status=$request->booking_status;
         $tab->save();
 
-        return redirect('bookingrequest')->with('status','Updated Successfully !');
+
+        $booking_Template=$this->bookingTemplate($tab, $tab_0_Room);
+        //echo $booking_Template; die();
+
+        $BookingConfiguration=BookingConfiguration::orderBy('id','DESC')->first();
+
+        $this->sdc->initMail($request->customer_email,
+        $request->booking_status.' Room Reservation - '.$this->sdc->SiteName,
+        $booking_Template);
+
+
+        $this->sdc->initMail($BookingConfiguration->booking_admin_email,
+        $request->booking_status.' Room Reservation - '.$this->sdc->SiteName,
+        $booking_Template);
+
+
+        return redirect('bookingrequest')->with('status','Booking Status ['.$request->booking_status.'] Updated Successfully !');
     }
 
     /**

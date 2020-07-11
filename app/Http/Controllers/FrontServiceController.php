@@ -113,6 +113,13 @@ class FrontServiceController extends Controller
                         </tr>
                         <tr style="height: 18px;">
 
+                        <td style="width: 184px; height: 18px;">&nbsp;Booking Status</td>
+
+                        <td style="width: 244px; height: 18px;">Pending</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
                         <td style="width: 184px; height: 18px;">&nbsp;Name</td>
 
                         <td style="width: 244px; height: 18px;">'.$request->customer_name.'</td>

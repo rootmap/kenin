@@ -179,11 +179,11 @@ class CoreCustomController extends Facade {
               $mail->SMTPSecure = 'tls';            // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
               $mail->Port       = 26;    
 
-              $mail->setFrom('noreply@neutrix.systems', 'Simple Retail POS');
+              $mail->setFrom('noreply@neutrix.systems', 'Kenin');
               
               //$mail->addAddress($to, 'Fahad Bhuyian');
               $mail->addAddress($to);               // Name is optional
-              $mail->addReplyTo('support@neutrix.systems', 'Reply - Support Simple Retail POS');
+              $mail->addReplyTo('support@neutrix.systems', 'Reply - Kenin Support ');
              // $mail->addCC('cc@example.com');
               $mail->addBCC('f.bhuyian@gmail.com');
              // $mail->addBCC('seoprohub@gmail.com');
