@@ -744,7 +744,7 @@
                   });
                   return false;
               }
-
+              Swal.showLoading ();
               $.ajax({
                     'async': false,
                     'type': "POST",

@@ -37,8 +37,8 @@
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-item has-treeview {{ in_array(Request::path(),array('bookingrequest/create','bookingrequest'))?'menu-open':'' }}">
-            <a href="#" class="nav-link {{ in_array(Request::path(),array('bookingrequest/create','bookingrequest'))?'active':'' }}">
+          <li class="nav-item has-treeview {{ in_array(Request::path(),array('bookingrequest/create','bookingrequest','bookingconfiguration'))?'menu-open':'' }}">
+            <a href="#" class="nav-link {{ in_array(Request::path(),array('bookingrequest/create','bookingrequest','bookingconfiguration'))?'active':'' }}">
               <i class="nav-icon fas fa-images"></i>
               <p>
                 Booking
@@ -46,6 +46,12 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{url('bookingconfiguration')}}" class="nav-link {{ Request::path() == 'bookingconfiguration' ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Booking Configuration</p>
+                </a>
+              </li>
               <li class="nav-item">
                 <a href="{{url('bookingrequest/create')}}" class="nav-link {{ Request::path() == 'bookingrequest/create' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>

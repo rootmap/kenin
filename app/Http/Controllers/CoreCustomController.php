@@ -24,6 +24,21 @@ class CoreCustomController extends Facade {
      *
      * @return \Illuminate\Http\Response
      */
+
+    public $SiteName="The Bombay Cottage";
+
+    public $SiteURL="thebombaycottage.com";
+    public $TableReservationAdminEmail="kamalhemel@gmail.com";
+    public $ContactAdminEmail="kamalhemel@gmail.com";
+    public $reply="kamalhemel@gmail.com";
+
+    public $paypal_client_id="";
+    public $paypal_secret="";
+
+    public function __construct(){ 
+        $dataSit=SiteSetting::find(1);
+        $this->SiteName = $dataSit->site_name;
+    }
     
     protected static function getFacadeAccessor() {
         //what you want

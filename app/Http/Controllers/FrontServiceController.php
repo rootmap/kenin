@@ -17,6 +17,7 @@ use App\FotterPageContent;
 use App\FotterMenu;
 use App\Room;
 use App\BookingRequest;
+use App\BookingConfiguration;
 
 use Illuminate\Http\Request;
 
@@ -65,6 +66,128 @@ class FrontServiceController extends Controller
         $roomData = Room::find($room);
         // $bookingCount=BookingRequest::whereDate('created_at',$arrival)->count();
         return view('front-end.pages.booking-room',['roomData'=>$roomData,'room'=>$room,'slider'=>$slider,'arrival'=>$arrival,'departure'=>$departure,'adult'=>$adult,'children'=>$children]);
+    }
+
+    private function bookingTemplate($request, $room){
+
+
+        $siteMessage='  <h2>
+                            <strong><span style="color: #ff9900;">Room Reservation Detail</span></strong>
+                        </h2>
+
+                        <table style="border: 2px solid #000000; width: 436px;">
+
+                        <tbody>
+
+                        <tr style="height: 32px;">
+
+                        <td style="width: 184px; height: 32px;">Reservation Created</td>
+
+                        <td style="width: 244px; height: 32px;">&nbsp;'.date('dS M Y, h:i A').'</td>
+
+                        </tr>
+
+                        <tr style="height: 46px;">
+
+                        <td style="width: 428px; height: 46px;" colspan="2">
+
+                        <h3 style="display: block; width: 80%; border-bottom: 3px #000 solid;"><strong>Reservation Detail</strong></h3>
+
+                        </td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Room Name</td>
+
+                        <td style="width: 244px; height: 18px;">'.$room->room_name.' ('.$room->room_size.')</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Room Quantity</td>
+
+                        <td style="width: 244px; height: 18px;">'.$room->room_quantity.'</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Name</td>
+
+                        <td style="width: 244px; height: 18px;">'.$request->customer_name.'</td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Email&nbsp;</td>
+
+                        <td style="width: 244px; height: 18px;">'.$request->customer_email.'</td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Phone&nbsp;</td>
+
+                        <td style="width: 244px; height: 18px;">'.$request->customer_phone.'</td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Address&nbsp;</td>
+
+                        <td style="width: 244px; height: 18px;">'.$request->customer_address.'</td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Reservation Date</td>
+
+                        <td style="width: 244px; height: 18px;">'.$request->reservation_date.'</td>
+
+                        </tr>
+
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Arrival Date</td>
+
+                        <td style="width: 244px; height: 18px;">'.$request->arrival_date.'</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Departure Date</td>
+
+                        <td style="width: 244px; height: 18px;">'.$request->departure_date.'</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Adults</td>
+
+                        <td style="width: 244px; height: 18px;">'.$request->adults.'</td>
+
+                        </tr>
+                        <tr style="height: 18px;">
+
+                        <td style="width: 184px; height: 18px;">&nbsp;Children</td>
+
+                        <td style="width: 244px; height: 18px;">'.$request->children.'</td>
+
+                        </tr>
+                        </tbody>
+
+                        </table>
+
+                        <p>Kind Regards, '.$this->sdc->SiteName.'&nbsp;</p>
+
+                        <p>&nbsp;</p>';
+
+        return $siteMessage;
     }
 
     public function bookingConfirm(Request $request){
@@ -116,7 +239,23 @@ class FrontServiceController extends Controller
         $tab->booking_status="Pending";
         $tab->save();
 
-        return response()->json(['status'=>0,'msg'=>'Booking Saved, Admin Will Response Soon.']);
+        $booking_Template=$this->bookingTemplate($request, $tab_0_Room);
+        //echo $booking_Template; die();
+
+        $BookingConfiguration=BookingConfiguration::orderBy('id','DESC')->first();
+
+        $this->sdc->initMail($request->customer_email,
+        'Online Room Reservation - '.$this->sdc->SiteName,
+        $booking_Template);
+
+
+        $this->sdc->initMail($BookingConfiguration->booking_admin_email,
+        'Online Room Reservation - '.$this->sdc->SiteName,
+        $booking_Template);
+
+            //$BookingConfiguration->booking_admin_email,
+
+        return response()->json(['status'=>0,'msg'=>$BookingConfiguration->booking_success_message]);
 
 
     }

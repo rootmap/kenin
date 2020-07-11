@@ -227,3 +227,16 @@ Route::post('/bookingrequest/ajax','BookingrequestController@ajaxSave');
 Route::post('/bookingrequest/datatable/ajax','BookingrequestController@datatable');
 Route::post('/bookingrequest/update/{id}','BookingrequestController@update');
 //======================== Bookingrequest Route End ===============================//
+//======================== Bookingconfiguration Route Start ===============================//
+Route::get('/bookingconfiguration/list','BookingconfigurationController@show');
+Route::get('/bookingconfiguration/create','BookingconfigurationController@create');
+Route::get('/bookingconfiguration/edit/{id}','BookingconfigurationController@edit');
+Route::get('/bookingconfiguration/delete/{id}','BookingconfigurationController@destroy');
+Route::get('/bookingconfiguration','BookingconfigurationController@index');
+Route::get('/bookingconfiguration/export/excel','BookingconfigurationController@ExportExcel');
+Route::get('/bookingconfiguration/export/pdf','BookingconfigurationController@ExportPDF');
+Route::post('/bookingconfiguration','BookingconfigurationController@store');
+Route::post('/bookingconfiguration/ajax','BookingconfigurationController@ajaxSave');
+Route::post('/bookingconfiguration/datatable/ajax','BookingconfigurationController@datatable');
+Route::post('/bookingconfiguration/update/{id}','BookingconfigurationController@update');
+//======================== Bookingconfiguration Route End ===============================//
