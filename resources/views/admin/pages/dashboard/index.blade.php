@@ -26,12 +26,12 @@
               <div class="inner">
                 <h3>{{0}}</h3>
 
-                <p>Contact Request</p>
+                <p>Total Booking</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="{{url('contactrequest')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('bookingrequest')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -41,12 +41,12 @@
               <div class="inner">
                 <h3>{{0}}</h3>
 
-                <p>Application Request</p>
+                <p>Confirm Booking</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="{{url('applicationform')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('bookingrequest')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -56,12 +56,12 @@
               <div class="inner">
                 <h3>44</h3>
 
-                <p>Structured Settlements</p>
+                <p>Payment Pending</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('bookingrequest')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -71,12 +71,12 @@
               <div class="inner">
                 <h3>65</h3>
 
-                <p>Inheritance Funding</p>
+                <p>Payment Refunded</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('payment/log')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -88,7 +88,7 @@
             <!-- /.card -->
             <div class="card">
               <div class="card-header border-0">
-                <h3 class="card-title"><b><i class="fa fa-phone-alt"></i> Today Contact Request List</b></h3>
+                <h3 class="card-title"><b><i class="fa fa-phone-alt"></i> Today Booking Request List</b></h3>
                
               </div>
                <hr /> 

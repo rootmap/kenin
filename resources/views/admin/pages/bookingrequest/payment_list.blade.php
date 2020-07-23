@@ -53,16 +53,21 @@
                             @foreach($data as $row)  
                                 <tr>
                                     <td class="text-center">{{$row->id}}</td>
-                                    <td class="text-center">{{$row->card_number}}</td>
+                                    <td class="text-center">{{"XXXX XXXX XXXX ".substr($row->card_number,-4)}}</td>
                                     <td class="text-center">{{$row->card_holder_name}}</td>
                                     <td class="text-center">{{$row->amount}}</td>
                                     <td>{{formatDate($row->created_at)}}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{url('bookingrequest/void/'.$row->id)}}" type="button" class="btn btn-default">
-                                                Void Transaction 
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                            @if($row->refund_status==1)
+                                                <button class="btn btn-danger">Refunded</button>
+                                            @else 
+                                                <a href="{{url('bookingrequest/void/'.$row->id)}}" type="button" class="btn btn-default">
+                                                    Refund Transaction 
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            @endif
+                                            
                                         </div>
                                     </td>
                                 

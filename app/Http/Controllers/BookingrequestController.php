@@ -695,7 +695,7 @@ class BookingRequestController extends Controller
             $merchant_id = $storeMerchantSet->merchant_id;
             $user        = $storeMerchantSet->username;
             $authkey        = $storeMerchantSet->password;
-            $server      = 'https://fts.cardconnect.com/cardconnect/rest/auth';
+            $server      = 'https://fts.cardconnect.com/cardconnect/rest/void';
             
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -743,7 +743,16 @@ class BookingRequestController extends Controller
     public function voidPayment($id=0){
         $tab=CardPointee::find($id);
         $response=$this->voidPaymentMake($tab->retref);
-        return redirect(url('payment/log'))->with('status','Void operation complete successfully.');
+        if($response->resptext=="Approval" && $response->respstat=="A"){
+                $tab->refund_status=1;
+                $tab->save();
+                return redirect(url('payment/log'))->with('status','Void operation complete successfully.');
+        }
+        else
+        {
+            return redirect(url('payment/log'))->with('error','Void operation failed.');
+        }
+        
     }
 
     public function paymentLog(){

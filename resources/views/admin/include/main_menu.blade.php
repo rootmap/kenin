@@ -5,7 +5,7 @@
            alt="Admin Logo"
            class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">A.L. Admin Panel</span>
+      <span class="brand-text font-weight-light">Kenin Admin Panel</span>
     </a>
 
     <!-- Sidebar -->
@@ -159,12 +159,12 @@
                   <p>Site Room Details</p>
                 </a>
               </li>
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <a href="{{url('room')}}" class="nav-link {{ Request::path() == 'room' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Booking Room Details</p>
                 </a>
-              </li>
+              </li> --}}
               
             </ul>
           </li>
