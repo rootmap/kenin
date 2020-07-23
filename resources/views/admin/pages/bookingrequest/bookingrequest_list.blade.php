@@ -62,8 +62,8 @@
                     <thead>
                         <tr>
                             <th class="text-center">ID</th>
-                            <th class="text-center">Room</th>
-                            <th class="text-center">Room Quantity</th>
+                            <th class="text-center">Arival</th>
+                            <th class="text-center">Departure</th>
                             <th class="text-center">Customer Name</th>
                             <th class="text-center">Booking From</th>
                             <th class="text-center">Booking Status</th>
@@ -76,7 +76,12 @@
                         @if(count($dataRow))
                             @foreach($dataRow as $row)  
                                 <tr>
-                                    <td class="text-center">{{$row->id}}</td><td class="text-center">{{$row->room_room_name}}</td><td class="text-center">{{$row->room_quantity}}</td><td class="text-center">{{$row->customer_name}}</td><td class="text-center">{{$row->booking_from}}</td><td class="text-center">{{$row->booking_status}}</td>
+                                    <td class="text-center">{{$row->id}}</td>
+                                    <td class="text-center">{{$row->arrival_date}}</td>
+                                    <td class="text-center">{{$row->departure_date}}</td>
+                                    <td class="text-center">{{$row->customer_name}}</td>
+                                    <td class="text-center">{{$row->booking_from}}</td>
+                                    <td class="text-center">{{$row->booking_status}}</td>
                                     <td>{{formatDate($row->created_at)}}</td>
                                     <td>
                                         <div class="btn-group">
@@ -99,8 +104,8 @@
                     <tfoot>
                     <tr>
                         <th class="text-center">ID</th>
-                        <th class="text-center">Room</th>
-                        <th class="text-center">Room Quantity</th>
+                        <th class="text-center">Arival</th>
+                        <th class="text-center">Departure</th>
                         <th class="text-center">Customer Name</th>
                         <th class="text-center">Booking From</th>
                         <th class="text-center">Booking Status</th>

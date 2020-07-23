@@ -17,6 +17,9 @@ use App\FotterPageContent;
 use App\FotterMenu;
 use App\Room;
 use App\BookingRequest;
+use App\Country;
+use App\Region;
+use App\City;
 use App\BookingConfiguration;
 
 use Illuminate\Http\Request;
@@ -53,11 +56,33 @@ class FrontServiceController extends Controller
 
     public function booking($arrival='',$departure='',$adult='',$children=''){
 
+        $country=Country::select('id','name','code')->orderBy('id','ASC')->get();
+        // $region=Region::select('name','code','country_id')->orderBy('id','ASC')->get();
+        // $city=City::select('name')->orderBy('id','ASC')->get();
         $slider=Slider::orderBy('id','DESC')->first();
-        $room = \DB::Select(\DB::raw("SELECT a.* FROM rooms AS a
-        WHERE a.id NOT IN (SELECT br.room FROM booking_requests AS br WHERE br.room=a.id AND cast(br.arrival_date as date) BETWEEN CAST('".$arrival."' as date) AND CAST('".$departure."' as date))"));
+        
         // $bookingCount=BookingRequest::whereDate('created_at',$arrival)->count();
-        return view('front-end.pages.booking',['room'=>$room,'slider'=>$slider,'arrival'=>$arrival,'departure'=>$departure,'adult'=>$adult,'children'=>$children]);
+
+        $data=[
+            'slider'=>$slider,
+            'arrival'=>$arrival,
+            'departure'=>$departure,
+            'adult'=>$adult,
+            'children'=>$children,
+            'country'=>$country
+
+        ];
+
+        //dd($data);
+
+        return view('front-end.pages.booking',$data);
+    }
+
+    public function getRegion(Request $request){
+
+        $country=Country::where('code',$request->country_id)->first();
+        $region=Region::where('country_id',$country->id)->get();
+        return response()->json($region);
     }
 
     public function bookingRoom($room=0, $arrival='',$departure='',$adult='',$children=''){
@@ -265,6 +290,15 @@ class FrontServiceController extends Controller
         return response()->json(['status'=>0,'msg'=>$BookingConfiguration->booking_success_message]);
 
 
+    }
+
+    public function checkBooking(Request $request){
+
+        $from = date('Y-m-d',strtotime($request->arrival_date));
+        $to = date('Y-m-d',strtotime($request->departure_date));
+
+        $total=BookingRequest::whereBetween(\DB::Raw('DATE(arrival_date)'), [$from, $to])->count();
+        return response()->json($total);
     }
 
     public function pages($pages=''){

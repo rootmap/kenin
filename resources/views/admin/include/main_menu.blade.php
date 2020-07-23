@@ -67,6 +67,12 @@
             </ul>
           </li>
           <li class="nav-item">
+            <a href="{{url('payment/log')}}" class="nav-link {{ Request::path() == 'payment/log' ? 'active' : '' }}">
+              <i class="nav-icon fas fa-credit-card"></i>
+              <p>Payment log</p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{url('slider')}}" class="nav-link {{ Request::path() == 'slider' ? 'active' : '' }}">
               <i class="nav-icon fas fa-igloo"></i>
               <p>Slider</p>

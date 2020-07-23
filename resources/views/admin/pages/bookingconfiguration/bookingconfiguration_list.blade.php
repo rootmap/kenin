@@ -62,6 +62,10 @@
                     <thead>
                         <tr>
                             <th class="text-center">ID</th>
+                            <th class="text-center">Booking Admin Email</th>
+                            <th class="text-center">Booking Success Message</th>
+                            <th class="text-center">Resort Daily Rent</th>
+                            <th class="text-center">Module Status</th>
                             <th class="text-center">Created At</th>
                             <th class="text-center">Actions</th>
 
@@ -71,7 +75,7 @@
                         @if(count($dataRow))
                             @foreach($dataRow as $row)  
                                 <tr>
-                                    <td class="text-center">{{$row->id}}</td>
+                                    <td class="text-center">{{$row->id}}</td><td class="text-center">{{$row->booking_admin_email}}</td><td class="text-center">{{$row->booking_success_message}}</td><td class="text-center">{{$row->resort_daily_rent}}</td><td class="text-center">{{$row->module_status}}</td>
                                     <td>{{formatDate($row->created_at)}}</td>
                                     <td>
                                         <div class="btn-group">
@@ -94,6 +98,10 @@
                     <tfoot>
                     <tr>
                         <th class="text-center">ID</th>
+                        <th class="text-center">Booking Admin Email</th>
+                        <th class="text-center">Booking Success Message</th>
+                        <th class="text-center">Resort Daily Rent</th>
+                        <th class="text-center">Module Status</th>
                         <th class="text-center">Created At</th>
                         <th class="text-center">Actions</th>
 

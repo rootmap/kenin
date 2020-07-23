@@ -67,135 +67,12 @@
           
             <div class="card-body">
                 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                  <label>Choose Room</label>
-                                  <select class="form-control select2" style="width: 100%;"  id="room" name="room">
-                                    
-                                        <option value="">Please Select</option>
-                                        @if(count($dataRow_Room)>0)
-                                            @foreach($dataRow_Room as $Room)
-                                                <option 
-                                        @if(isset($dataRow->id))
-                                            @if($dataRow->id==$Room->id)
-                                                selected="selected" 
-                                            @endif
-                                        @endif 
-                                         value="{{$Room->id}}">{{$Room->room_name}}</option>
-                                                
-                                            @endforeach
-                                        @endif
-                                        
-                                  </select>
-                                </div>
-                            </div>
-                        </div>
+                       
                     
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                  <label>Choose Quantity</label>
-                                  <select class="form-control select2" style="width: 100%;"  id="room_quantity" name="room_quantity">
-                                    
-        <option value="">Please select</option>
-            <option 
-                    <?php 
-                    if($dataRow->room_quantity=="1"){
-                        ?>
-                        selected="selected" 
-                        <?php 
-                    }
-                    ?> 
-            value="1">1</option>
-            <option 
-                    <?php 
-                    if($dataRow->room_quantity=="2"){
-                        ?>
-                        selected="selected" 
-                        <?php 
-                    }
-                    ?> 
-            value="2">2</option>
-            <option 
-                    <?php 
-                    if($dataRow->room_quantity=="3"){
-                        ?>
-                        selected="selected" 
-                        <?php 
-                    }
-                    ?> 
-            value="3">3</option>
-            <option 
-                    <?php 
-                    if($dataRow->room_quantity=="4"){
-                        ?>
-                        selected="selected" 
-                        <?php 
-                    }
-                    ?> 
-            value="4">4</option>
-            <option 
-                    <?php 
-                    if($dataRow->room_quantity=="5"){
-                        ?>
-                        selected="selected" 
-                        <?php 
-                    }
-                    ?> 
-            value="5">5</option>
-            <option 
-                    <?php 
-                    if($dataRow->room_quantity=="6"){
-                        ?>
-                        selected="selected" 
-                        <?php 
-                    }
-                    ?> 
-            value="6">6</option>
-            <option 
-                    <?php 
-                    if($dataRow->room_quantity=="7"){
-                        ?>
-                        selected="selected" 
-                        <?php 
-                    }
-                    ?> 
-            value="7">7</option>
-            <option 
-                    <?php 
-                    if($dataRow->room_quantity=="8"){
-                        ?>
-                        selected="selected" 
-                        <?php 
-                    }
-                    ?> 
-            value="8">8</option>
-            <option 
-                    <?php 
-                    if($dataRow->room_quantity=="9"){
-                        ?>
-                        selected="selected" 
-                        <?php 
-                    }
-                    ?> 
-            value="9">9</option>
-            <option 
-                    <?php 
-                    if($dataRow->room_quantity=="10"){
-                        ?>
-                        selected="selected" 
-                        <?php 
-                    }
-                    ?> 
-            value="10">10</option>
-                                  </select>
-                                </div>
-                            </div>
-                        </div>
+                        
                     
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                       <!-- text input -->
                       <div class="form-group">
                         <label for="customer_name">Customer Name</label>
@@ -212,10 +89,7 @@
                         class="form-control" placeholder="Enter Customer Name" id="customer_name" name="customer_name">
                       </div>
                     </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                       <!-- text input -->
                       <div class="form-group">
                         <label for="customer_phone">Customer Phone</label>
@@ -271,7 +145,7 @@
                 </div>
                 
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                       <!-- text input -->
                       <div class="form-group">
                         <label for="arrival_date">Arrival Date</label>
@@ -288,10 +162,8 @@
                         class="form-control" placeholder="Choose Arrival Date" id="arrival_date" name="arrival_date">
                       </div>
                     </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-sm-12">
+
+                    <div class="col-sm-6">
                       <!-- text input -->
                       <div class="form-group">
                         <label for="departure_date">Departure Date</label>
@@ -311,7 +183,7 @@
                 </div>
                 
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                   <label>Choose Adults</label>
                                   <select class="form-control select2" style="width: 100%;"  id="adults" name="adults">
@@ -590,10 +462,8 @@
                                   </select>
                                 </div>
                             </div>
-                        </div>
-                    
-                        <div class="row">
-                            <div class="col-md-12">
+
+                            <div class="col-md-6">
                                 <div class="form-group">
                                   <label>Choose Children</label>
                                   <select class="form-control select2" style="width: 100%;"  id="children" name="children">
@@ -884,7 +754,7 @@
                         </div>
                     
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                   <label>Choose Booking From</label>
                                   <select class="form-control select2" style="width: 100%;"  id="booking_from" name="booking_from">
@@ -920,10 +790,8 @@
                                   </select>
                                 </div>
                             </div>
-                        </div>
-                    
-                        <div class="row">
-                            <div class="col-md-12">
+
+                            <div class="col-md-6">
                                 <div class="form-group">
                                   <label>Choose Booking Status</label>
                                   <select class="form-control select2" style="width: 100%;"  id="booking_status" name="booking_status">
@@ -972,6 +840,10 @@
               <a class="btn btn-danger" href="{{url('bookingrequest/edit/'.$dataRow->id)}}">
                 <i class="far fa-times-circle"></i> 
                 Reset
+              </a>
+              <a class="btn btn-warning" href="{{url('bookingrequest/takepayment/'.$dataRow->id)}}">
+                <i class="far fa-credit-card"></i> 
+                Take Payment & Confirm Booking
               </a>
             </div>
           </form>

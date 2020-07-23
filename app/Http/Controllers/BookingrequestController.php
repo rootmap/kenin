@@ -7,6 +7,9 @@ use App\AdminLog;
 use Illuminate\Http\Request;
 use App\Room;
 use App\BookingConfiguration;
+use App\CardPointeeProfile;
+use App\CardPointee;
+use App\CardpointeStoreSetting;
                 
 
 class BookingRequestController extends Controller
@@ -32,9 +35,6 @@ class BookingRequestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(){
-
-
-        
         $tab_Room=Room::all();           
         return view('admin.pages.bookingrequest.bookingrequest_create',['dataRow_Room'=>$tab_Room]);
     }
@@ -60,9 +60,6 @@ class BookingRequestController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-                
-                'room'=>'required',
-                'room_quantity'=>'required',
                 'customer_name'=>'required',
                 'customer_phone'=>'required',
                 'customer_email'=>'required',
@@ -77,14 +74,7 @@ class BookingRequestController extends Controller
 
         $this->SystemAdminLog("Booking Request","Save New","Create New");
 
-        
-        $tab_0_Room=Room::where('id',$request->room)->first();
-        $room_0_Room=$tab_0_Room->room_name;
         $tab=new BookingRequest();
-        
-        $tab->room_room_name=$room_0_Room;
-        $tab->room=$request->room;
-        $tab->room_quantity=$request->room_quantity;
         $tab->customer_name=$request->customer_name;
         $tab->customer_phone=$request->customer_phone;
         $tab->customer_email=$request->customer_email;
@@ -354,7 +344,7 @@ class BookingRequestController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private function bookingTemplate($booking, $room){
+    private function bookingTemplate($booking){
 
 
         $siteMessage='  <h2>
@@ -383,20 +373,7 @@ class BookingRequestController extends Controller
 
                         </tr>
 
-                        <tr style="height: 18px;">
-
-                        <td style="width: 184px; height: 18px;">&nbsp;Room Name</td>
-
-                        <td style="width: 244px; height: 18px;">'.$room->room_name.' ('.$room->room_size.')</td>
-
-                        </tr>
-                        <tr style="height: 18px;">
-
-                        <td style="width: 184px; height: 18px;">&nbsp;Room Quantity</td>
-
-                        <td style="width: 244px; height: 18px;">'.$booking->room_quantity.'</td>
-
-                        </tr>
+                        
                         <tr style="height: 18px;">
 
                         <td style="width: 184px; height: 18px;">&nbsp;Booking From</td>
@@ -495,9 +472,6 @@ class BookingRequestController extends Controller
     public function update(Request $request, BookingRequest $bookingrequest,$id=0)
     {
         $this->validate($request,[
-                
-                'room'=>'required',
-                'room_quantity'=>'required',
                 'customer_name'=>'required',
                 'customer_phone'=>'required',
                 'customer_email'=>'required',
@@ -512,14 +486,8 @@ class BookingRequestController extends Controller
 
         $this->SystemAdminLog("Booking Request","Update","Edit / Modify");
 
-        
-        $tab_0_Room=Room::where('id',$request->room)->first();
-        $room_0_Room=$tab_0_Room->room_name;
+
         $tab=BookingRequest::find($id);
-        
-        $tab->room_room_name=$room_0_Room;
-        $tab->room=$request->room;
-        $tab->room_quantity=$request->room_quantity;
         $tab->customer_name=$request->customer_name;
         $tab->customer_phone=$request->customer_phone;
         $tab->customer_email=$request->customer_email;
@@ -533,7 +501,7 @@ class BookingRequestController extends Controller
         $tab->save();
 
 
-        $booking_Template=$this->bookingTemplate($tab, $tab_0_Room);
+        $booking_Template=$this->bookingTemplate($tab);
         //echo $booking_Template; die();
 
         $BookingConfiguration=BookingConfiguration::orderBy('id','DESC')->first();
@@ -549,6 +517,238 @@ class BookingRequestController extends Controller
 
 
         return redirect('bookingrequest')->with('status','Booking Status ['.$request->booking_status.'] Updated Successfully !');
+    }
+
+    public function takepayment(Request $request, BookingRequest $bookingrequest,$id=0)
+    {
+        $this->SystemAdminLog("Booking Modification for Taking payment","Update","Edit / Modify");
+        $tab=BookingRequest::find($id);
+        //dd($tab);
+        $BookingConfiguration=BookingConfiguration::orderBy('id','DESC')->first();
+        $amount=number_format($BookingConfiguration->resort_daily_rent,2);
+        $chargedProfile=$this->chargeCaptureProfile($request,$tab->paymentprofileid,$tab->acctid,$amount);
+        
+        $paymentMsg="";
+        if($chargedProfile['status']==0)
+        {
+            $paymentMsg=$chargedProfile['msg'];
+            $tab->booking_status="Canceled";
+            $tab->save();
+        }
+        else
+        {
+            $paymentMsg="Payment Captured Successfully";
+            $tab->booking_status="Confirm";
+            $tab->save();
+        }
+
+        //dd($chargedProfile);
+
+        $booking_Template=$this->bookingTemplate($tab);
+        //echo $booking_Template; die();
+
+        $this->sdc->initMail($request->customer_email,
+        $tab->booking_status.' Room Reservation - '.$this->sdc->SiteName,
+        $booking_Template);
+
+
+        $this->sdc->initMail($BookingConfiguration->booking_admin_email,
+        $tab->booking_status.' Room Reservation - '.$this->sdc->SiteName,
+        $booking_Template);
+
+
+        return redirect('bookingrequest')->with('status','Booking Status ['.$tab->booking_status.'] & Payment Status ['.$paymentMsg.'] !');
+    }
+
+    //CardPointee
+    private function cardPointeeChargeProfile($response){
+        $invoice_id = time();
+        try {
+
+            $profile=CardPointeeProfile::where('profileid',$response->profileid)->where('acctid',$response->acctid)->first();
+            $tab=new CardPointee();
+            $tab->responseJson=json_encode($response);
+            $tab->invoice_id=$invoice_id;
+            $tab->card_number=$profile->card_number;
+            $tab->card_holder_name=$profile->card_holder_name;
+            $tab->amount=$response->amount;
+            $tab->retref=$response->retref;
+            $tab->profileid=$response->profileid;
+            $tab->status_remarks=$response->resptext;
+            $tab->save();
+
+            if($tab->id){
+                return (array)['status'=>1,'msg'=>'Successfully saved','response'=>$response];
+            }
+            else
+            {
+                return (array)['status'=>0,'msg'=>'Failed, Please try again later.'];
+            }
+        } catch (Exception $e) {
+            return (array)['status'=>0,'msg'=>$e];
+        }
+
+    }
+
+    public function captureCardProfile($request,$profileid='',$acctid='',$amount=0){
+
+        $storeMerchantSetCount=CardpointeStoreSetting::orderBy('id','DESC')->count();
+        if($storeMerchantSetCount==0){
+
+            return (object)array('status'=>0,'message'=>'Invalid credentials','resptext'=>'Invalid credentials');
+                die();
+
+        }else{
+
+            $storeMerchantSet=CardpointeStoreSetting::orderBy('id','DESC')->first();
+
+            $merchant_id = $storeMerchantSet->merchant_id;
+            $user        = $storeMerchantSet->username;
+            $authkey        = $storeMerchantSet->password;
+            $server      = 'https://fts.cardconnect.com/cardconnect/rest/auth';
+            
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $server,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "PUT",
+                CURLOPT_POSTFIELDS =>"{\n    \"merchid\": \"$merchant_id\",\n    \"profile\": \"$profileid/$acctid\",\n    \"amount\": \"$amount\",\n    \"currency\": \"USD\"\n}",
+                CURLOPT_HTTPHEADER => array(
+                "Authorization: Basic ".$authkey,
+                "Content-Type: application/json"
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            //echo $response;
+
+            $gCAT=json_decode($response,true);
+            //dd($gCAT);
+            if($gCAT['resptext']=="Approval" && $gCAT['respstat']=="A"){
+
+                    return (object)$gCAT;
+
+            }
+            else{
+
+                //dd($gAT);
+                return (object)array('status'=>0,'message'=>$gCAT['resptext'],'resptext'=>$gCAT['resptext'],'datares'=>$gCAT);
+                die();
+                //return $gAT;
+            }
+
+            //dd($storeMerchantSet);
+        }
+
+        
+    }
+
+    private function chargeCaptureProfile($request,$profileid,$acctid,$amount){
+        
+        // $profileid='16868558860271439755';
+        // $acctid='1';
+        // $amount=1.00;
+        $response=$this->captureCardProfile($request,$profileid,$acctid,$amount);
+
+        if(isset($response->respstat) && isset($response->resptext))
+        {
+            if($response->respstat=="A" && $response->resptext=="Approval")
+            {
+                //dd($response);
+                return $this->cardPointeeChargeProfile($response);
+            }
+            else
+            {
+                return (array)['status'=>0,'msg'=>$response->resptext];
+            }
+        }
+        else
+        {
+            return (array)['status'=>0,'msg'=>$response->resptext];
+        }
+
+        //dd($response);
+        //return response()->json(json_encode($response));
+
+    }
+    /* charge Profile End */
+
+    public function voidPaymentMake($retref=''){
+
+        $storeMerchantSetCount=CardpointeStoreSetting::orderBy('id','DESC')->count();
+        if($storeMerchantSetCount==0){
+
+            return (object)array('status'=>0,'message'=>'Invalid credentials','resptext'=>'Invalid credentials');
+                die();
+
+        }else{
+
+            $storeMerchantSet=CardpointeStoreSetting::orderBy('id','DESC')->first();
+
+            $merchant_id = $storeMerchantSet->merchant_id;
+            $user        = $storeMerchantSet->username;
+            $authkey        = $storeMerchantSet->password;
+            $server      = 'https://fts.cardconnect.com/cardconnect/rest/auth';
+            
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $server,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "PUT",
+                CURLOPT_POSTFIELDS =>"{\n    \"merchid\": \"$merchant_id\",\n    \"retref\": \"$retref\"\n}",
+                CURLOPT_HTTPHEADER => array(
+                "Authorization: Basic ".$authkey,
+                "Content-Type: application/json"
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            //echo $response;
+
+            $gCAT=json_decode($response,true);
+            //dd($gCAT);
+            if($gCAT['resptext']=="Approval" && $gCAT['respstat']=="A"){
+
+                    return (object)$gCAT;
+
+            }
+            else{
+
+                //dd($gAT);
+                return (object)array('status'=>0,'message'=>$gCAT['resptext'],'resptext'=>$gCAT['resptext'],'datares'=>$gCAT);
+                die();
+                //return $gAT;
+            }
+
+            //dd($storeMerchantSet);
+        }
+
+        
+    }
+
+    public function voidPayment($id=0){
+        $tab=CardPointee::find($id);
+        $response=$this->voidPaymentMake($tab->retref);
+        return redirect(url('payment/log'))->with('status','Void operation complete successfully.');
+    }
+
+    public function paymentLog(){
+        $tab=CardPointee::all();
+        return view('admin.pages.bookingrequest.payment_list',['data'=>$tab]);
     }
 
     /**

@@ -77,6 +77,7 @@ class BookingConfigurationController extends Controller
                 
                 'booking_admin_email'=>'required',
                 'booking_success_message'=>'required',
+                'resort_daily_rent'=>'required',
                 'module_status'=>'required',
         ]);
 
@@ -87,6 +88,7 @@ class BookingConfigurationController extends Controller
         
         $tab->booking_admin_email=$request->booking_admin_email;
         $tab->booking_success_message=$request->booking_success_message;
+        $tab->resort_daily_rent=$request->resort_daily_rent;
         $tab->module_status=$request->module_status;
         $tab->save();
 
@@ -100,6 +102,7 @@ class BookingConfigurationController extends Controller
                 
                 'booking_admin_email'=>'required',
                 'booking_success_message'=>'required',
+                'resort_daily_rent'=>'required',
                 'module_status'=>'required',
         ]);
 
@@ -107,6 +110,7 @@ class BookingConfigurationController extends Controller
         
         $tab->booking_admin_email=$request->booking_admin_email;
         $tab->booking_success_message=$request->booking_success_message;
+        $tab->resort_daily_rent=$request->resort_daily_rent;
         $tab->module_status=$request->module_status;
         $tab->save();
 
@@ -129,6 +133,7 @@ class BookingConfigurationController extends Controller
                         $query->where('id','LIKE','%'.$search.'%');
                             $query->orWhere('booking_admin_email','LIKE','%'.$search.'%');
                             $query->orWhere('booking_success_message','LIKE','%'.$search.'%');
+                            $query->orWhere('resort_daily_rent','LIKE','%'.$search.'%');
                             $query->orWhere('module_status','LIKE','%'.$search.'%');
                             $query->orWhere('created_at','LIKE','%'.$search.'%');
 
@@ -147,6 +152,7 @@ class BookingConfigurationController extends Controller
                         $query->where('id','LIKE','%'.$search.'%');
                             $query->orWhere('booking_admin_email','LIKE','%'.$search.'%');
                             $query->orWhere('booking_success_message','LIKE','%'.$search.'%');
+                            $query->orWhere('resort_daily_rent','LIKE','%'.$search.'%');
                             $query->orWhere('module_status','LIKE','%'.$search.'%');
                             $query->orWhere('created_at','LIKE','%'.$search.'%');
 
@@ -194,12 +200,12 @@ class BookingConfigurationController extends Controller
          $dataDateTimeIns=formatDateTime(date('d-M-Y H:i:s a'));
         $data=array();
         $array_column=array(
-                                'ID','Booking Admin Email','Booking Success Message','Module Status','Created Date');
+                                'ID','Booking Admin Email','Booking Success Message','Resort Daily Rent','Module Status','Created Date');
         array_push($data, $array_column);
         $inv=$this->BookingConfigurationQuery($request);
         foreach($inv as $voi):
             $inv_arry=array(
-                                $voi->id,$voi->booking_admin_email,$voi->booking_success_message,$voi->module_status,formatDate($voi->created_at));
+                                $voi->id,$voi->booking_admin_email,$voi->booking_success_message,$voi->resort_daily_rent,$voi->module_status,formatDate($voi->created_at));
             array_push($data, $inv_arry);
         endforeach;
 
@@ -225,6 +231,8 @@ class BookingConfigurationController extends Controller
                         
                             <th class='text-center' style='font-size:12px;' >Booking Success Message</th>
                         
+                            <th class='text-center' style='font-size:12px;' >Resort Daily Rent</th>
+                        
                             <th class='text-center' style='font-size:12px;' >Module Status</th>
                         
                 <th class='text-center' style='font-size:12px;'>Created Date</th>
@@ -238,6 +246,7 @@ class BookingConfigurationController extends Controller
                         <td style='font-size:12px;' class='text-center'>".$voi->id."</td>
                         <td style='font-size:12px;' class='text-center'>".$voi->booking_admin_email."</td>
                         <td style='font-size:12px;' class='text-center'>".$voi->booking_success_message."</td>
+                        <td style='font-size:12px;' class='text-center'>".$voi->resort_daily_rent."</td>
                         <td style='font-size:12px;' class='text-center'>".$voi->module_status."</td>
                         <td style='font-size:12px; text-align:center;' class='text-center'>".formatDate($voi->created_at)."</td>
                         </tr>";
@@ -287,6 +296,7 @@ class BookingConfigurationController extends Controller
                 
                 'booking_admin_email'=>'required',
                 'booking_success_message'=>'required',
+                'resort_daily_rent'=>'required',
                 'module_status'=>'required',
         ]);
 
@@ -297,6 +307,7 @@ class BookingConfigurationController extends Controller
         
         $tab->booking_admin_email=$request->booking_admin_email;
         $tab->booking_success_message=$request->booking_success_message;
+        $tab->resort_daily_rent=$request->resort_daily_rent;
         $tab->module_status=$request->module_status;
         $tab->save();
 

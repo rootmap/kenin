@@ -59,6 +59,16 @@
                     </div>
                 </div>
                 
+                <div class="row">
+                    <div class="col-sm-12">
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label for="resort_daily_rent">Resort Daily Rent</label>
+                        <input type="text" class="form-control" placeholder="Enter Resort Daily Rent" id="resort_daily_rent" name="resort_daily_rent">
+                      </div>
+                    </div>
+                </div>
+                
         <div class="row">
             <div class="col-sm-12">
               <!-- radio -->

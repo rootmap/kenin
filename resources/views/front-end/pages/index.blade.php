@@ -263,10 +263,10 @@
 @section('js')
     <script>
 
-      $(document).ready(function(){
+      $(document).ready(function(e){
           $.getScript("https://cdn.jsdelivr.net/npm/sweetalert2@9");
 
-          $(".main-book-now-button").click(function(){
+          $(".main-book-now-button").click(function(e){
               Swal.showLoading ();
               var arival_date=$("#datetimepicker").val();
               var departure_date=$("#datetimepicker2").val();
@@ -294,7 +294,57 @@
                   return false;
               }
 
-              window.location.href="{{url('booking')}}/"+arival_date+"/"+departure_date+"/"+lg_Adults+"/"+lg_Children;
+              Swal.showLoading();
+              $.ajax({
+                  'async': false,
+                  'type': "POST",
+                  'global': false,
+                  'dataType': 'json',
+                  'url': "{{url('cpe/checking/booking')}}",
+                  'data': { 
+                      'arrival_date': arival_date, 
+                      'departure_date':departure_date, 
+                      'adults': lg_Adults, 
+                      'children': lg_Children, 
+                      '_token': csrftLarVe, 
+                  },
+                  'error':function(res){
+                      Swal.fire({
+                          icon: 'error',
+                          title: '<h3 class="text-danger">Warning</h3>',
+                          html: '<h5>Something went wrong!!!</h5>'
+                      });
+
+                  },
+                  'success': function(data) {
+                      console.log("Completing Sales : " + data);
+                      Swal.hideLoading();
+                      if(data == 0)
+                      {
+                          Swal.fire({
+                              icon: 'success',
+                              title: '<h3 class="text-success">Congratulations</h3>',
+                              html: '<h5>Booking available, Please wait redirecting to payment page.</h5>'
+                          });
+
+                          setTimeout(() => {
+                            window.location.href="{{url('booking')}}/"+arival_date+"/"+departure_date+"/"+lg_Adults+"/"+lg_Children;
+                          }, 2000);
+
+                      }
+                      else
+                      {
+                          Swal.fire({
+                              icon: 'error',
+                              title: '<h3 class="text-danger">Sorry</h3>',
+                              html: '<h5>Booking not available on selected date range !!!</h5>'
+                          });
+                      }
+                      
+                  }
+              });
+
+              e.preventDefault();
 
               //alert('working');
           });
