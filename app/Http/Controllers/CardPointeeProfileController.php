@@ -214,7 +214,7 @@ class CardPointeeProfileController extends Controller
 
             $merchant_id = $storeMerchantSet->merchant_id;
             $user        = $storeMerchantSet->username;
-            $authkey        = $storeMerchantSet->password;
+            $authkey        = $storeMerchantSet->authcode;
             $server      = 'https://fts.cardconnect.com/cardconnect/rest/profile';
             
             $curl = curl_init();

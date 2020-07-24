@@ -107,7 +107,7 @@ class CardPointeeController extends Controller
 
             $merchant_id = $storeMerchantSet->merchant_id;
             $user        = $storeMerchantSet->username;
-            $authkey        = $storeMerchantSet->password;
+            $authkey        = $storeMerchantSet->authcode;
             $server      = 'https://fts.cardconnect.com/cardconnect/rest/auth';
             
             $curl = curl_init();
@@ -197,7 +197,7 @@ class CardPointeeController extends Controller
 
             $merchant_id = $storeMerchantSet->merchant_id;
             $user        = $storeMerchantSet->username;
-            $authkey        = $storeMerchantSet->password;
+            $authkey        = $storeMerchantSet->authcode;
             $server      = 'https://fts.cardconnect.com/cardconnect/rest/auth';
             //$server      = 'https://uat.cardconnect.com/cardconnect/rest/auth';
 
@@ -329,7 +329,7 @@ class CardPointeeController extends Controller
 
                 $merchant_id = $storeMerchantSet->merchant_id;
                 $user        = $storeMerchantSet->username;
-                $authkey        = $storeMerchantSet->password;
+                $authkey        = $storeMerchantSet->authcode;
                 $server      = 'https://fts.cardconnect.com/cardconnect/rest/voidByOrderId';
 
             $curl = curl_init();
@@ -379,7 +379,7 @@ class CardPointeeController extends Controller
 
                 $merchant_id = $storeMerchantSet->merchant_id;
                 $user        = $storeMerchantSet->username;
-                $authkey        = $storeMerchantSet->password;
+                $authkey        = $storeMerchantSet->authcode;
                 $server      = 'https://fts.cardconnect.com/cardconnect/rest/voidByOrderId';
 
             $curl = curl_init();
@@ -423,7 +423,7 @@ class CardPointeeController extends Controller
 
                 $merchant_id = $storeMerchantSet->merchant_id;
                 $user        = $storeMerchantSet->username;
-                $authkey        = $storeMerchantSet->password;
+                $authkey        = $storeMerchantSet->authcode;
                 $server      = 'https://fts.cardconnect.com/cardconnect/rest/voidByOrderId';
 
             $curl = curl_init();

@@ -175,8 +175,8 @@
               <p>Contact</p>
             </a>
           </li> --}}
-          <li class="nav-item has-treeview {{ in_array(Request::path(),array('sitesetting','fottermenu','topmenu','fotterpagecontent'))?'menu-open':'' }}">
-            <a href="#" class="nav-link {{ in_array(Request::path(),array('sitesetting','fottermenu','topmenu','fotterpagecontent'))?'active':'' }}">
+          <li class="nav-item has-treeview {{ in_array(Request::path(),array('sitesetting','fottermenu','topmenu','fotterpagecontent','cardpointestoresetting'))?'menu-open':'' }}">
+            <a href="#" class="nav-link {{ in_array(Request::path(),array('sitesetting','fottermenu','topmenu','fotterpagecontent','cardpointestoresetting'))?'active':'' }}">
               <i class="nav-icon fas fa-cogs"></i>
               <p>
                 Setting
@@ -188,6 +188,12 @@
                 <a href="{{url('sitesetting')}}" class="nav-link {{ Request::path() == 'sitesetting' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Site Setting</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{url('cardpointestoresetting')}}" class="nav-link {{ Request::path() == 'cardpointestoresetting' ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Cardpointe Store Setting</p>
                 </a>
               </li>
               <li class="nav-item">

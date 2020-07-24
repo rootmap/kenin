@@ -203,61 +203,91 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/fotterpagecontent/datatable/ajax','FotterpagecontentController@datatable');
     Route::post('/fotterpagecontent/update/{id}','FotterpagecontentController@update');
     //======================== Fotterpagecontent Route End ===============================//
+
+        
+    //======================== Room Route Start ===============================//
+    Route::get('/room/list','RoomController@show');
+    Route::get('/room/create','RoomController@create');
+    Route::get('/room/edit/{id}','RoomController@edit');
+    Route::get('/room/delete/{id}','RoomController@destroy');
+    Route::get('/room','RoomController@index');
+    Route::get('/room/export/excel','RoomController@ExportExcel');
+    Route::get('/room/export/pdf','RoomController@ExportPDF');
+    Route::post('/room','RoomController@store');
+    Route::post('/room/ajax','RoomController@ajaxSave');
+    Route::post('/room/datatable/ajax','RoomController@datatable');
+    Route::post('/room/update/{id}','RoomController@update');
+    //======================== Room Route End ===============================//
+    //======================== Bookingrequest Route Start ===============================//
+    Route::get('/payment/log','BookingrequestController@paymentLog');
+    Route::get('/bookingrequest/list','BookingrequestController@show');
+    Route::get('/bookingrequest/create','BookingrequestController@create');
+    Route::get('/bookingrequest/edit/{id}','BookingrequestController@edit');
+    Route::get('/bookingrequest/takepayment/{id}','BookingrequestController@takepayment');
+    Route::get('/bookingrequest/void/{id}','BookingrequestController@voidPayment');
+    Route::get('/bookingrequest/delete/{id}','BookingrequestController@destroy');
+    Route::get('/bookingrequest','BookingrequestController@index');
+    Route::get('/bookingrequest/export/excel','BookingrequestController@ExportExcel');
+    Route::get('/bookingrequest/export/pdf','BookingrequestController@ExportPDF');
+    Route::post('/bookingrequest','BookingrequestController@store');
+    Route::post('/bookingrequest/ajax','BookingrequestController@ajaxSave');
+    Route::post('/bookingrequest/datatable/ajax','BookingrequestController@datatable');
+    Route::post('/bookingrequest/update/{id}','BookingrequestController@update');
+    //======================== Bookingrequest Route End ===============================//
+    //======================== Bookingconfiguration Route Start ===============================//
+    Route::get('/bookingconfiguration/list','BookingconfigurationController@show');
+    Route::get('/bookingconfiguration/create','BookingconfigurationController@create');
+    Route::get('/bookingconfiguration/edit/{id}','BookingconfigurationController@edit');
+    Route::get('/bookingconfiguration/delete/{id}','BookingconfigurationController@destroy');
+    Route::get('/bookingconfiguration','BookingconfigurationController@index');
+    Route::get('/bookingconfiguration/export/excel','BookingconfigurationController@ExportExcel');
+    Route::get('/bookingconfiguration/export/pdf','BookingconfigurationController@ExportPDF');
+    Route::post('/bookingconfiguration','BookingconfigurationController@store');
+    Route::post('/bookingconfiguration/ajax','BookingconfigurationController@ajaxSave');
+    Route::post('/bookingconfiguration/datatable/ajax','BookingconfigurationController@datatable');
+    Route::post('/bookingconfiguration/update/{id}','BookingconfigurationController@update');
+    //======================== Bookingconfiguration Route End ===============================//
+    //======================== Bookingconfiguration Route Start ===============================//
+    Route::get('/bookingconfiguration/list','BookingconfigurationController@show');
+    Route::get('/bookingconfiguration/create','BookingconfigurationController@create');
+    Route::get('/bookingconfiguration/edit/{id}','BookingconfigurationController@edit');
+    Route::get('/bookingconfiguration/delete/{id}','BookingconfigurationController@destroy');
+    Route::get('/bookingconfiguration','BookingconfigurationController@index');
+    Route::get('/bookingconfiguration/export/excel','BookingconfigurationController@ExportExcel');
+    Route::get('/bookingconfiguration/export/pdf','BookingconfigurationController@ExportPDF');
+    Route::post('/bookingconfiguration','BookingconfigurationController@store');
+    Route::post('/bookingconfiguration/ajax','BookingconfigurationController@ajaxSave');
+    Route::post('/bookingconfiguration/datatable/ajax','BookingconfigurationController@datatable');
+    Route::post('/bookingconfiguration/update/{id}','BookingconfigurationController@update');
+    //======================== Bookingconfiguration Route End ===============================//
+
+    
+    //======================== Cardpointestoresetting Route Start ===============================//
+    Route::get('/cardpointestoresetting/list','CardpointestoresettingController@show');
+    Route::get('/cardpointestoresetting/create','CardpointestoresettingController@create');
+    Route::get('/cardpointestoresetting/edit/{id}','CardpointestoresettingController@edit');
+    Route::get('/cardpointestoresetting/delete/{id}','CardpointestoresettingController@destroy');
+    Route::get('/cardpointestoresetting','CardpointestoresettingController@index');
+    Route::get('/cardpointestoresetting/export/excel','CardpointestoresettingController@ExportExcel');
+    Route::get('/cardpointestoresetting/export/pdf','CardpointestoresettingController@ExportPDF');
+    Route::post('/cardpointestoresetting','CardpointestoresettingController@store');
+    Route::post('/cardpointestoresetting/ajax','CardpointestoresettingController@ajaxSave');
+    Route::post('/cardpointestoresetting/datatable/ajax','CardpointestoresettingController@datatable');
+    Route::post('/cardpointestoresetting/update/{id}','CardpointestoresettingController@update');
+    //======================== Cardpointestoresetting Route End ===============================//
+    //======================== Cardpointestoresetting Route Start ===============================//
+    Route::get('/cardpointestoresetting/list','CardpointestoresettingController@show');
+    Route::get('/cardpointestoresetting/create','CardpointestoresettingController@create');
+    Route::get('/cardpointestoresetting/edit/{id}','CardpointestoresettingController@edit');
+    Route::get('/cardpointestoresetting/delete/{id}','CardpointestoresettingController@destroy');
+    Route::get('/cardpointestoresetting','CardpointestoresettingController@index');
+    Route::get('/cardpointestoresetting/export/excel','CardpointestoresettingController@ExportExcel');
+    Route::get('/cardpointestoresetting/export/pdf','CardpointestoresettingController@ExportPDF');
+    Route::post('/cardpointestoresetting','CardpointestoresettingController@store');
+    Route::post('/cardpointestoresetting/ajax','CardpointestoresettingController@ajaxSave');
+    Route::post('/cardpointestoresetting/datatable/ajax','CardpointestoresettingController@datatable');
+    Route::post('/cardpointestoresetting/update/{id}','CardpointestoresettingController@update');
+    //======================== Cardpointestoresetting Route End ===============================//
+
 });
 
-
-//======================== Room Route Start ===============================//
-Route::get('/room/list','RoomController@show');
-Route::get('/room/create','RoomController@create');
-Route::get('/room/edit/{id}','RoomController@edit');
-Route::get('/room/delete/{id}','RoomController@destroy');
-Route::get('/room','RoomController@index');
-Route::get('/room/export/excel','RoomController@ExportExcel');
-Route::get('/room/export/pdf','RoomController@ExportPDF');
-Route::post('/room','RoomController@store');
-Route::post('/room/ajax','RoomController@ajaxSave');
-Route::post('/room/datatable/ajax','RoomController@datatable');
-Route::post('/room/update/{id}','RoomController@update');
-//======================== Room Route End ===============================//
-//======================== Bookingrequest Route Start ===============================//
-Route::get('/payment/log','BookingrequestController@paymentLog');
-Route::get('/bookingrequest/list','BookingrequestController@show');
-Route::get('/bookingrequest/create','BookingrequestController@create');
-Route::get('/bookingrequest/edit/{id}','BookingrequestController@edit');
-Route::get('/bookingrequest/takepayment/{id}','BookingrequestController@takepayment');
-Route::get('/bookingrequest/void/{id}','BookingrequestController@voidPayment');
-Route::get('/bookingrequest/delete/{id}','BookingrequestController@destroy');
-Route::get('/bookingrequest','BookingrequestController@index');
-Route::get('/bookingrequest/export/excel','BookingrequestController@ExportExcel');
-Route::get('/bookingrequest/export/pdf','BookingrequestController@ExportPDF');
-Route::post('/bookingrequest','BookingrequestController@store');
-Route::post('/bookingrequest/ajax','BookingrequestController@ajaxSave');
-Route::post('/bookingrequest/datatable/ajax','BookingrequestController@datatable');
-Route::post('/bookingrequest/update/{id}','BookingrequestController@update');
-//======================== Bookingrequest Route End ===============================//
-//======================== Bookingconfiguration Route Start ===============================//
-Route::get('/bookingconfiguration/list','BookingconfigurationController@show');
-Route::get('/bookingconfiguration/create','BookingconfigurationController@create');
-Route::get('/bookingconfiguration/edit/{id}','BookingconfigurationController@edit');
-Route::get('/bookingconfiguration/delete/{id}','BookingconfigurationController@destroy');
-Route::get('/bookingconfiguration','BookingconfigurationController@index');
-Route::get('/bookingconfiguration/export/excel','BookingconfigurationController@ExportExcel');
-Route::get('/bookingconfiguration/export/pdf','BookingconfigurationController@ExportPDF');
-Route::post('/bookingconfiguration','BookingconfigurationController@store');
-Route::post('/bookingconfiguration/ajax','BookingconfigurationController@ajaxSave');
-Route::post('/bookingconfiguration/datatable/ajax','BookingconfigurationController@datatable');
-Route::post('/bookingconfiguration/update/{id}','BookingconfigurationController@update');
-//======================== Bookingconfiguration Route End ===============================//
-//======================== Bookingconfiguration Route Start ===============================//
-Route::get('/bookingconfiguration/list','BookingconfigurationController@show');
-Route::get('/bookingconfiguration/create','BookingconfigurationController@create');
-Route::get('/bookingconfiguration/edit/{id}','BookingconfigurationController@edit');
-Route::get('/bookingconfiguration/delete/{id}','BookingconfigurationController@destroy');
-Route::get('/bookingconfiguration','BookingconfigurationController@index');
-Route::get('/bookingconfiguration/export/excel','BookingconfigurationController@ExportExcel');
-Route::get('/bookingconfiguration/export/pdf','BookingconfigurationController@ExportPDF');
-Route::post('/bookingconfiguration','BookingconfigurationController@store');
-Route::post('/bookingconfiguration/ajax','BookingconfigurationController@ajaxSave');
-Route::post('/bookingconfiguration/datatable/ajax','BookingconfigurationController@datatable');
-Route::post('/bookingconfiguration/update/{id}','BookingconfigurationController@update');
-//======================== Bookingconfiguration Route End ===============================//

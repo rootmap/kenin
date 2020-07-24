@@ -10,7 +10,7 @@ use App\VideosContent;
 use App\ExploreShelterInfo;
 use App\ShelterPhoto;
 use App\PeopleAndStory;
-use App\peopleFeedback;
+use App\PeopleFeedback;
 use App\RoomInfo;
 use App\RoomDetail;
 use App\FotterPageContent;
