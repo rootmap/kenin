@@ -96,10 +96,10 @@
     @isset($video)
         @if ($video->module_status="Active")
         <section id="video" class="video-section">
-            <div class="video-content">
+            {{-- <div class="video-content">
                 <h5 class="gray">{{$video->section_sub_title}}</h5>
                 <h3>{{$video->section_title}}</h3><a href="{{url('/'.$video->section_button_url)}}" class="book-now-button w-button">{{$video->section_button_text}}</a>
-            </div>
+            </div> --}}
             <div data-poster-url="{{asset('upload/videoscontent/'.$video->section_foreground_image)}}" 
                 data-video-urls="{{asset('upload/videoscontent/'.$video->section_video_mp4)}},{{asset('upload/videoscontent/'.$video->section_video_webm)}}" 
                 data-autoplay="true" data-loop="true" data-wf-ignore="true" 

@@ -31,7 +31,7 @@
         <!-- general form elements -->
         <div class="card card-primary">
           <div class="card-header">
-            <h3 class="card-title">Create New Booking Request</h3>
+            <h3 class="card-title">Create Manual Booking Request | Temporary ID : {{Session::get('booking_id')}} </h3>
             <div class="card-tools">
               <ul class="pagination pagination-sm float-right">
                 <li class="page-item"><a class="page-link bg-primary" href="{{url('bookingrequest/list')}}"> Data <i class="fas fa-table"></i></a></li>
@@ -92,13 +92,49 @@
                       </div>
                     </div>
                 </div>
+
+                <div class="row">
+                  <div class="col-sm-12">
+                      <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Rental Name</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="tr1" class="crud-item">
+                                <td>1</td>
+                                <td>
+                                  <select id="example-select" name="rental_id[]" class="form-control rental_service" size="1">
+                                    <option value="">Select Rental Services</option>
+                                    @isset($rentalService)
+                                        @foreach ($rentalService as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                        @endforeach
+                                    @endisset
+                                </select> 
+                                </td>
+                                <td>
+                                  <input readonly type="text" id="example-text-input" class="form-control price_book" value="0" placeholder="Text" name="rental_price[]">
+                                </td>
+                                <td>
+                                    <button type="button" onclick="deleteRow(this)" class="btn btn-warning deleteRow btn-alt btn-default"><i class="fa fa-times fa-fw"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                  </div>
+              </div>
                 
                 <div class="row">
                     <div class="col-sm-6">
                       <!-- text input -->
                       <div class="form-group">
                         <label for="arrival_date">Arrival Date</label>
-                        <input type="text" class="form-control" placeholder="Choose Arrival Date" id="arrival_date" name="arrival_date">
+                        <input type="text" class="form-control dateTimePick" placeholder="Choose Arrival Date" id="arrival_date" name="arrival_date">
                       </div>
                     </div>
 
@@ -106,10 +142,13 @@
                       <!-- text input -->
                       <div class="form-group">
                         <label for="departure_date">Departure Date</label>
-                        <input type="text" class="form-control" placeholder="Choose Departure Date" id="departure_date" name="departure_date">
+                        <input type="text" class="form-control dateTimePick" placeholder="Choose Departure Date" id="departure_date" name="departure_date">
                       </div>
                     </div>
                 </div>
+
+
+                
                 
                         <div class="row">
                             <div class="col-md-6">
@@ -290,11 +329,91 @@
                         </div>
                            
             </div>
+            <input type="hidden" class="price_book" value="{{$bookingConfiguration->resort_daily_rent}}" />
+            <input type="hidden" class="payment_json" value="" />
+            <input type="hidden" class="payment_status" value="0" />
+            <input type="hidden" class="temporary_id" value="{{Session::get('booking_id')}}" />
+            <input type="hidden" class="amount_paid" name="amount_paid" value="0" />
             <!-- /.card-body -->
 
+            <div class="modal fade" id="modal-md">
+              <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-credit-card"></i> Enter Card Details | Total Booking Bill $<span id="totalMadePay"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="departure_date">Card Number</label>
+                          <input type="text" class="form-control" placeholder="Enter Card Number" id="cc-number" name="cc-number">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="departure_date">Card Holder Name</label>
+                          <input type="text" class="form-control" placeholder="Enter Card Holder Name" id="cc-name" name="cc-name">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="departure_date">Card CVC</label>
+                          <input type="password" class="form-control" placeholder="Enter Card CVC" id="cc-cvc" name="cc-cvc">
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="departure_date">Expire Month</label>
+                          <select class="form-control" id="cc-month" name="cc-month">
+                              <option value="">Select Month</option>
+                              @for ($i=1; $i<=12; $i++)
+                              <option value="{{strlen($i)==1?'0'.$i:$i}}">{{strlen($i)==1?'0'.$i:$i}}</option>
+                              @endfor
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="departure_date">Expire Year</label>
+                          <select class="form-control" id="cc-year" name="cc-year">
+                            <option value="">Select Year</option>
+                            @for ($i=date('Y'); $i<=date('Y')+10; $i++)
+                            <option value="{{strlen($i-2000)==1?'0'.($i-2000):($i-2000)}}">{{strlen($i)==1?'0'.$i:$i}}</option>
+                            @endfor
+                        </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    
+                    
+                    
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary capture-payment"> Take/Capture Payment </button>
+                  </div>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+
             <div class="card-footer">
-              <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Submit</button>
+              <button type="submit" style="display: none;" class="btn btn-primary saveBooking"><i class="fas fa-save"></i> Submit</button>
               <a class="btn btn-danger" href="{{url('bookingrequest/create')}}"><i class="far fa-times-circle"></i> Reset</a>
+              <button type="button" onclick="javascript:addmore();" class="btn btn-info"><i class="fas fa-plus"></i> Add More Field</button>
+              <button type="button" onclick="javascript:loadPayment();" class="btn btn-info"><i class="fas fa-credit-card"></i> Make Payment</button>
+            
             </div>
           </form>
         </div>
@@ -308,18 +427,227 @@
 </section>
 @endsection
 @section("css")
-    
+    <link rel="stylesheet" href="{{url('admin/plugins/daterangepicker/daterangepicker.css')}}">
     <link rel="stylesheet" href="{{url('admin/plugins/select2/css/select2.min.css')}}">
-    
 @endsection
         
 @section("js")
-
+    <script src="{{url('admin/plugins/moment/moment.min.js')}}"></script>
+    <script src="{{url('admin/plugins/inputmask/min/jquery.inputmask.bundle.min.js')}}"></script>
+    <script src="{{url('admin/plugins/daterangepicker/daterangepicker.js')}}"></script>
     <script src="{{url('admin/plugins/select2/js/select2.full.min.js')}}"></script>
     <script>
+    var csrftLarVe = $('meta[name="csrf-token"]').attr("content");
+    var chargePayment = "{{url('bookingrequest/capture/payment')}}";
+
+    function refreshSerial(){
+        var r=1;
+        $.each($(".crud-item"),function(key,row){
+            $(this).attr("id","tr"+r);
+            $(this).find("td:first").html(r);
+            r++;
+        });
+    }
+
+    function getTotalBook(){
+      var total=0;
+      $('body').find('.price_book').each(function(key,row){
+          total+=($(this).val()-0);
+      });
+      
+      console.log('total',total);
+
+      $("#totalMadePay").html(total);
+      $("input[name=amount_paid]").val(total);
+    }
+
+
+    function addmore(){
+        $("tr[class^='crud-item']:last").after($("tr[class^='crud-item']:last").clone());
+        
+        var item=$(".crud-item").length;
+        refreshSerial();
+        $("tr[class^='crud-item']:last").children('td:eq(2)').children().val(0);
+    }
+
+    function deleteRow(place){
+        var item=$(".crud-item").length;
+        if(item>1)
+        {
+            var itemID=$(place).parent().parent().attr("id");
+            $("#"+itemID).remove()
+        }
+        refreshSerial(); 
+    }
+
+    function loadPayment(){
+        $("#modal-md").modal('show');
+        getTotalBook();
+    }
+
+    function swalErrorMsg(msg) {
+        
+        Swal.fire({
+            icon: 'error',
+            title: '<h3 class="text-danger">Warning</h3>',
+            html: '<h5>' + msg + '!!!</h5>'
+        });
+        return false;
+
+    }
+
+    function swalSuccessMsg(msg) {
+        Swal.fire({
+            icon: 'success',
+            title: '<h3 class="text-success">Thank You</h3>',
+            html: '<h5>' + msg + '</h5>'
+        });
+    }
+
+    var rentalService=<?=json_encode($rentalService)?>;
     $(document).ready(function(){
+        $.getScript("https://cdn.jsdelivr.net/npm/sweetalert2@9");
+        getTotalBook();
         $(".select2").select2();
+
+        $('body').on('change', '.price_book', function() {
+          getTotalBook();
+        });
+
+
+
+        $('body').on('change', '.rental_service', function() {
+            var rental_id=$(this).val();
+            if(rental_id.length>0)
+            {
+                
+
+              var htPrice=0;
+              $.each(rentalService,function(key,row){
+                  if(row.id==rental_id)
+                  {
+                      console.log('price',row.price);
+                      htPrice=row.price;
+                  }
+              });
+
+              $(this).parent().parent().children('td:eq(2)').children().val(htPrice);
+
+            }
+
+        });
+
+        $('body').on('click', '.capture-payment', function() {
+            var temporary_id=$('input[name=temporary_id]').val();
+            if(temporary_id!="")
+            {
+                var customer_name=$("input[name=customer_name]").val();
+                var customer_phone=$("input[name=customer_phone]").val();
+                var customer_email=$("input[name=customer_email]").val();
+                var customer_address=$("textarea[name=customer_address]").val(); 
+                var arrival_date=$("input[name=arrival_date]").val(); 
+                var departure_date=$("input[name=departure_date]").val(); 
+                var adults=$("select[name=adults]").val(); 
+                var children=$("select[name=children]").val(); 
+                var booking_from=$("select[name=booking_from]").val(); 
+                var booking_status=$("select[name=booking_status]").val(); 
+                var cc_number=$("input[name=cc-number]").val(); 
+                var cc_name=$("input[name=cc-name]").val(); 
+                var cc_cvc=$("input[name=cc-cvc]").val(); 
+                var cc_month=$("select[name=cc-month]").val(); 
+                var cc_year=$("select[name=cc-year]").val(); 
+                var amount_paid=$("input[name=amount_paid]").val(); 
+
+                if(customer_name.length==0){ $("#modal-md").modal('hide'); swalErrorMsg("Customer Name Required!!!.");  return false; }
+                if(customer_phone.length==0){ $("#modal-md").modal('hide'); swalErrorMsg("Customer Phone Required!!!.");  return false; }
+                if(customer_email.length==0){ $("#modal-md").modal('hide'); swalErrorMsg("Customer Email Required!!!.");  return false; }
+                if(customer_address.length==0){ $("#modal-md").modal('hide'); swalErrorMsg("Customer Address Required!!!.");  return false; }
+                if(arrival_date.length==0){ $("#modal-md").modal('hide'); swalErrorMsg("Customer Arrival Date Required!!!.");  return false; }
+                if(departure_date.length==0){ $("#modal-md").modal('hide'); swalErrorMsg("Customer Departure Date Required!!!.");  return false; }
+                if(adults.length==0){ $("#modal-md").modal('hide'); swalErrorMsg("Adults Required!!!.");  return false; }
+                if(children.length==0){ $("#modal-md").modal('hide'); swalErrorMsg("Children Required!!!.");  return false; }
+                if(booking_from.length==0){ $("#modal-md").modal('hide'); swalErrorMsg("Booking From Required!!!.");  return false; }
+                if(booking_status.length==0){ $("#modal-md").modal('hide'); swalErrorMsg("Booking Status Required!!!.");  return false; }
+                if(cc_number.length==0){ swalErrorMsg("Card Number Required!!!.");  return false; }
+                if(cc_name.length==0){ swalErrorMsg("Card Holder Name Required!!!.");  return false; }
+                if(cc_cvc.length==0){ swalErrorMsg("Card CVC Required!!!.");  return false; }
+                if(cc_month.length==0){ swalErrorMsg("Card Month Required!!!.");  return false; }
+                if(cc_year.length==0){ swalErrorMsg("Card Year Required!!!.");  return false; }
+
+                Swal.showLoading();
+
+                $.ajax({
+                        async: true,
+                        type: "POST",
+                        global: true,
+                        dataType: "json",
+                        url: chargePayment,
+                        data: {
+                          customer_name: customer_name,
+                          customer_phone: customer_phone,
+                          customer_email: customer_email,
+                          customer_address: customer_address,
+                          arrival_date: arrival_date,
+                          departure_date: departure_date,
+                          adults: adults,
+                          children: children,
+                          booking_from: booking_from,
+                          booking_status: booking_status,
+                          cc_number: cc_number,
+                          cc_name: cc_name,
+                          cc_cvc: cc_cvc,
+                          cc_month: cc_month,
+                          cc_year: cc_year,
+                          amount_paid: amount_paid,
+                          _token: csrftLarVe
+                        },
+                        success: function(res) {
+                            console.log('Success', res);
+                            Swal.hideLoading();
+
+                            if(res.respstat=="A" && res.resptext=="Approval"){ 
+                                swalSuccessMsg("Payment Captured Successfully, Please wait saving your info."); 
+                                setTimeout(() => {
+                                    $(".saveBooking").click();
+                                }, 2000);
+                                return true; 
+                            }
+                            else if(res.respstat!="A"){ 
+                                swalErrorMsg(res.resptext); 
+                                return false; 
+                            }
+                            else
+                            {
+                                swalErrorMsg("Something Went wrong, Please try capture again."); return false;
+                            }
+                    
+                        },
+                        error: function(reject) {
+                            swalErrorMsg('Something went wrong, please try again later.');
+                            return false;
+                    
+                            console.log('Error', reject.status);
+                            /* window.location.href = window.location.href; */
+                        }
+                });
+
+            }
+
+        });
+
+
+
+
     });
+
+    $('.dateTimePick').daterangepicker({
+      timePicker: true,
+      singleDatePicker: true,
+      timePickerIncrement: 60,
+      locale: {
+        format: 'YYYY-MM-DD hh:mm'
+      }
+    })
     </script>
 
 @endsection

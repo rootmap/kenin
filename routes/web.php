@@ -227,6 +227,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/bookingrequest/void/{id}','BookingrequestController@voidPayment');
     Route::get('/bookingrequest/delete/{id}','BookingrequestController@destroy');
     Route::get('/bookingrequest','BookingrequestController@index');
+    Route::post('/bookingrequest/capture/payment','BookingrequestController@capturePayment');
+    Route::post('/rentalbooking/capture/payment','BookingrequestController@RentalBookingcapturePayment');
     Route::get('/bookingrequest/export/excel','BookingrequestController@ExportExcel');
     Route::get('/bookingrequest/export/pdf','BookingrequestController@ExportPDF');
     Route::post('/bookingrequest','BookingrequestController@store');
@@ -234,19 +236,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/bookingrequest/datatable/ajax','BookingrequestController@datatable');
     Route::post('/bookingrequest/update/{id}','BookingrequestController@update');
     //======================== Bookingrequest Route End ===============================//
-    //======================== Bookingconfiguration Route Start ===============================//
-    Route::get('/bookingconfiguration/list','BookingconfigurationController@show');
-    Route::get('/bookingconfiguration/create','BookingconfigurationController@create');
-    Route::get('/bookingconfiguration/edit/{id}','BookingconfigurationController@edit');
-    Route::get('/bookingconfiguration/delete/{id}','BookingconfigurationController@destroy');
-    Route::get('/bookingconfiguration','BookingconfigurationController@index');
-    Route::get('/bookingconfiguration/export/excel','BookingconfigurationController@ExportExcel');
-    Route::get('/bookingconfiguration/export/pdf','BookingconfigurationController@ExportPDF');
-    Route::post('/bookingconfiguration','BookingconfigurationController@store');
-    Route::post('/bookingconfiguration/ajax','BookingconfigurationController@ajaxSave');
-    Route::post('/bookingconfiguration/datatable/ajax','BookingconfigurationController@datatable');
-    Route::post('/bookingconfiguration/update/{id}','BookingconfigurationController@update');
-    //======================== Bookingconfiguration Route End ===============================//
     //======================== Bookingconfiguration Route Start ===============================//
     Route::get('/bookingconfiguration/list','BookingconfigurationController@show');
     Route::get('/bookingconfiguration/create','BookingconfigurationController@create');
@@ -289,5 +278,34 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/cardpointestoresetting/update/{id}','CardpointestoresettingController@update');
     //======================== Cardpointestoresetting Route End ===============================//
 
+    //======================== Rentalservice Route Start ===============================//
+    Route::get('/rentalservice/list','RentalserviceController@show');
+    Route::get('/rentalservice/create','RentalserviceController@create');
+    Route::get('/rentalservice/edit/{id}','RentalserviceController@edit');
+    Route::get('/rentalservice/delete/{id}','RentalserviceController@destroy');
+    Route::get('/rentalservice','RentalserviceController@index');
+    Route::get('/rentalservice/export/excel','RentalserviceController@ExportExcel');
+    Route::get('/rentalservice/export/pdf','RentalserviceController@ExportPDF');
+    Route::post('/rentalservice','RentalserviceController@store');
+    Route::post('/rentalservice/ajax','RentalserviceController@ajaxSave');
+    Route::post('/rentalservice/datatable/ajax','RentalserviceController@datatable');
+    Route::post('/rentalservice/update/{id}','RentalserviceController@update');
+    //======================== Rentalservice Route End ===============================//
+
 });
 
+
+
+//======================== Rentalbooking Route Start ===============================//
+Route::get('/rentalbooking/list','RentalbookingController@show');
+Route::get('/rentalbooking/create','RentalbookingController@create');
+Route::get('/rentalbooking/edit/{id}','RentalbookingController@edit');
+Route::get('/rentalbooking/delete/{id}','RentalbookingController@destroy');
+Route::get('/rentalbooking','RentalbookingController@index');
+Route::get('/rentalbooking/export/excel','RentalbookingController@ExportExcel');
+Route::get('/rentalbooking/export/pdf','RentalbookingController@ExportPDF');
+Route::post('/rentalbooking','RentalbookingController@store');
+Route::post('/rentalbooking/ajax','RentalbookingController@ajaxSave');
+Route::post('/rentalbooking/datatable/ajax','RentalbookingController@datatable');
+Route::post('/rentalbooking/update/{id}','RentalbookingController@update');
+//======================== Rentalbooking Route End ===============================//

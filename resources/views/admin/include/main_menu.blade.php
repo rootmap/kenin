@@ -169,12 +169,12 @@
             </ul>
           </li>
 
-          {{-- <li class="nav-item">
-            <a href="{{url('contactus')}}" class="nav-link {{ Request::path() == 'contactus' ? 'active' : '' }}">
+          <li class="nav-item">
+            <a href="{{url('rentalservice')}}" class="nav-link {{ Request::path() == 'rentalservice' ? 'active' : '' }}">
               <i class="nav-icon fas fa-phone-square-alt"></i>
-              <p>Contact</p>
+              <p>Rental Service</p>
             </a>
-          </li> --}}
+          </li>
           <li class="nav-item has-treeview {{ in_array(Request::path(),array('sitesetting','fottermenu','topmenu','fotterpagecontent','cardpointestoresetting'))?'menu-open':'' }}">
             <a href="#" class="nav-link {{ in_array(Request::path(),array('sitesetting','fottermenu','topmenu','fotterpagecontent','cardpointestoresetting'))?'active':'' }}">
               <i class="nav-icon fas fa-cogs"></i>

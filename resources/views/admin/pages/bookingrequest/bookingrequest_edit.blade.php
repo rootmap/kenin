@@ -181,6 +181,40 @@
                       </div>
                     </div>
                 </div>
+
+                @isset($dataRow->rental)
+                    @if (!empty($dataRow->rental))
+                        <?php $dataJson=json_decode($dataRow->rental); ?>
+                        @if (count($dataJson)>0)
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>SL</th>
+                                            <th>Rental Name</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                                        @foreach ($dataJson as $key=>$item)
+                                                            <tr id="tr1" class="crud-item">
+                                                                <td>{{$key+1}}</td>
+                                                                <td>{{$item->rental_name}}</td>
+                                                                <td>
+                                                                    {{$item->rental_price}}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                        
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+
+                @endif
+                                @endif
+                              @endisset
                 
                         <div class="row">
                             <div class="col-md-6">

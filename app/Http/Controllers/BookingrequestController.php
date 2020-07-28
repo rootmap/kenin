@@ -10,7 +10,8 @@ use App\BookingConfiguration;
 use App\CardPointeeProfile;
 use App\CardPointee;
 use App\CardpointeStoreSetting;
-                
+use App\RentalService;
+use Session;                
 
 class BookingRequestController extends Controller
 {
@@ -35,8 +36,17 @@ class BookingRequestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(){
+        if(!Session::has('booking_id'))
+        {
+            Session::put('booking_id',time());
+        }
+        
+        //echo Session::get('booking_id');
         $tab_Room=Room::all();           
-        return view('admin.pages.bookingrequest.bookingrequest_create',['dataRow_Room'=>$tab_Room]);
+        $RentalService=RentalService::select('id','name','price')->get();           
+        $bookingConfiguration=BookingConfiguration::orderBy('id','DESC')->first();      
+        //dd($bookingConfiguration);     
+        return view('admin.pages.bookingrequest.bookingrequest_create',['dataRow_Room'=>$tab_Room,'rentalService'=>$RentalService,'bookingConfiguration'=>$bookingConfiguration]);
     }
 
     /**
@@ -59,6 +69,10 @@ class BookingRequestController extends Controller
 
     public function store(Request $request)
     {
+
+        
+        
+
         $this->validate($request,[
                 'customer_name'=>'required',
                 'customer_phone'=>'required',
@@ -74,11 +88,21 @@ class BookingRequestController extends Controller
 
         $this->SystemAdminLog("Booking Request","Save New","Create New");
 
+        $rental=[];
+        if(isset($request->rental_id)){
+            foreach ($request->rental_id as $key => $rent) {
+                $rentInfo=RentalService::find($rent);
+                $rental[]=['rental_id'=>$rent,'rental_name'=>$rentInfo->name,'rental_price'=>$request->rental_price[$key]];
+            }
+        }
+        $rental_json=json_encode($rental);
+
         $tab=new BookingRequest();
         $tab->customer_name=$request->customer_name;
         $tab->customer_phone=$request->customer_phone;
         $tab->customer_email=$request->customer_email;
         $tab->customer_address=$request->customer_address;
+        $tab->rental=$rental_json;
         $tab->arrival_date=$request->arrival_date;
         $tab->departure_date=$request->departure_date;
         $tab->adults=$request->adults;
@@ -86,7 +110,7 @@ class BookingRequestController extends Controller
         $tab->booking_from=$request->booking_from;
         $tab->booking_status=$request->booking_status;
         $tab->save();
-
+        //dd($request);
         return redirect('bookingrequest')->with('status','Added Successfully !');
 
     }
@@ -559,6 +583,190 @@ class BookingRequestController extends Controller
 
         return redirect('bookingrequest')->with('status','Booking Status ['.$tab->booking_status.'] & Payment Status ['.$paymentMsg.'] !');
     }
+
+    //manual request start
+    public function capturePayment(Request $request){
+        //dd($request);
+
+        $cc_number=str_replace(" ","",$request->cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+
+        $expiry=$request->cc_month."".$request->cc_year;
+        $amount=$request->amount_paid;
+        $cc_name=$request->cc_name;
+
+        $booking_id=Session::get('booking_id');
+
+        $storeMerchantSetCount=CardpointeStoreSetting::orderBy('id','DESC')->count();
+        if($storeMerchantSetCount==0){
+
+            return response()->json((object)array('status'=>0,'message'=>'Invalid credentials','resptext'=>'Invalid credentials'));
+                die();
+
+        }else{
+
+            $storeMerchantSet=CardpointeStoreSetting::orderBy('id','DESC')->first();
+
+            $merchant_id = $storeMerchantSet->merchant_id;
+            $user        = $storeMerchantSet->username;
+            $authkey        = $storeMerchantSet->authcode;
+            $server      = 'https://fts.cardconnect.com/cardconnect/rest/auth';
+            
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $server,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "PUT",
+                CURLOPT_POSTFIELDS =>"{\n    \"merchid\": \"$merchant_id\",\n    \"account\": \"$cc_number\",\n    \"expiry\": \"$expiry\",\n    \"amount\": \"$amount\",\n    \"orderid\": \"$booking_id\",\n    \"currency\": \"USD\",\n    \"name\": \"$cc_name\",\n    \"capture\": \"y\",\n    \"receipt\": \"y\"\n}",
+                CURLOPT_HTTPHEADER => array(
+                "Authorization: Basic ".$authkey,
+                "Content-Type: application/json"
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            //echo $response;
+
+            $gCAT=json_decode($response,true);
+            //dd($gCAT);
+            if($gCAT['resptext']=="Approval" && $gCAT['respstat']=="A"){
+
+                    $response=(object)$gCAT;
+
+                    $tab=new CardPointee();
+                    $tab->responseJson=json_encode($response);
+                    $tab->invoice_id=$booking_id;
+                    $tab->card_number=$cc_number;
+                    $tab->card_holder_name=$cc_name;
+                    $tab->amount=$amount;
+                    $tab->retref=$gCAT['retref'];
+                    $tab->profileid=0;
+                    $tab->status_remarks=$gCAT['resptext'];
+                    $tab->save();
+
+
+                    return response()->json((object)$gCAT);
+
+
+
+            }
+            else{
+
+                //dd($gAT);
+                return response()->json((object)array('status'=>0,'message'=>$gCAT['resptext'],'resptext'=>$gCAT['resptext'],'datares'=>$gCAT));
+                die();
+                //return $gAT;
+            }
+
+            //dd($storeMerchantSet);
+        }
+    }
+    //manual request End
+
+    //Rental Booking request start
+    public function RentalBookingcapturePayment(Request $request){
+        //dd($request);
+
+        $cc_number=str_replace(" ","",$request->cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+        $cc_number=str_replace(" ","",$cc_number);
+
+        $expiry=$request->cc_month."".$request->cc_year;
+        $amount=$request->amount_paid;
+        $cc_name=$request->cc_name;
+
+        $booking_id=time();
+
+        $storeMerchantSetCount=CardpointeStoreSetting::orderBy('id','DESC')->count();
+        if($storeMerchantSetCount==0){
+
+            return response()->json((object)array('status'=>0,'message'=>'Invalid credentials','resptext'=>'Invalid credentials'));
+                die();
+
+        }else{
+
+            $storeMerchantSet=CardpointeStoreSetting::orderBy('id','DESC')->first();
+
+            $merchant_id = $storeMerchantSet->merchant_id;
+            $user        = $storeMerchantSet->username;
+            $authkey        = $storeMerchantSet->authcode;
+            $server      = 'https://fts.cardconnect.com/cardconnect/rest/auth';
+            
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $server,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "PUT",
+                CURLOPT_POSTFIELDS =>"{\n    \"merchid\": \"$merchant_id\",\n    \"account\": \"$cc_number\",\n    \"expiry\": \"$expiry\",\n    \"amount\": \"$amount\",\n    \"orderid\": \"$booking_id\",\n    \"currency\": \"USD\",\n    \"name\": \"$cc_name\",\n    \"capture\": \"y\",\n    \"receipt\": \"y\"\n}",
+                CURLOPT_HTTPHEADER => array(
+                "Authorization: Basic ".$authkey,
+                "Content-Type: application/json"
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            //echo $response;
+
+            $gCAT=json_decode($response,true);
+            //dd($gCAT);
+            if($gCAT['resptext']=="Approval" && $gCAT['respstat']=="A"){
+
+                    $response=(object)$gCAT;
+
+                    $tab=new CardPointee();
+                    $tab->responseJson=json_encode($response);
+                    $tab->invoice_id=$booking_id;
+                    $tab->card_number=$cc_number;
+                    $tab->card_holder_name=$cc_name;
+                    $tab->amount=$amount;
+                    $tab->retref=$gCAT['retref'];
+                    $tab->profileid=0;
+                    $tab->status_remarks=$gCAT['resptext'];
+                    $tab->save();
+
+
+                    return response()->json((object)$gCAT);
+
+
+
+            }
+            else{
+
+                //dd($gAT);
+                return response()->json((object)array('status'=>0,'message'=>$gCAT['resptext'],'resptext'=>$gCAT['resptext'],'datares'=>$gCAT));
+                die();
+                //return $gAT;
+            }
+
+            //dd($storeMerchantSet);
+        }
+    }
+    //Rental Booking request End
 
     //CardPointee
     private function cardPointeeChargeProfile($response){

@@ -12,8 +12,8 @@
 <meta content="width=device-width, initial-scale=1" name="viewport">
 <meta content="Neutrix.Systems" name="generator">
 <link href="{{asset('site/css/normalize.css')}}" rel="stylesheet" type="text/css">
-<link href="{{asset('site/css/webflow.css')}}" rel="stylesheet" type="text/css">
-<link href="{{asset('site/css/kenin.webflow.css')}}" rel="stylesheet" type="text/css">
+<link href="{{asset('site/css/main.css')}}" rel="stylesheet" type="text/css">
+<link href="{{asset('site/css/mainormalize.css')}}" rel="stylesheet" type="text/css">
 
 <script src="{{asset('site/js/webfont.js')}}" type="text/javascript"></script>
 <script type="text/javascript">WebFont.load({  google: {    families: ["IBM Plex Sans:300,regular,500,700"]  }});</script>
