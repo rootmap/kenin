@@ -5,7 +5,7 @@
            alt="Admin Logo"
            class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">Kenin Admin Panel</span>
+      <span class="brand-text font-weight-light">Admin Panel</span>
     </a>
 
     <!-- Sidebar -->
@@ -37,8 +37,8 @@
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-item has-treeview {{ in_array(Request::path(),array('bookingrequest/create','bookingrequest','bookingconfiguration'))?'menu-open':'' }}">
-            <a href="#" class="nav-link {{ in_array(Request::path(),array('bookingrequest/create','bookingrequest','bookingconfiguration'))?'active':'' }}">
+          <li class="nav-item has-treeview {{ in_array(Request::path(),array('bookingrequest/create','bookingrequest','bookingconfiguration','rentalbooking/create','rentalbooking'))?'menu-open':'' }}">
+            <a href="#" class="nav-link {{ in_array(Request::path(),array('bookingrequest/create','bookingrequest','bookingconfiguration','rentalbooking/create','rentalbooking'))?'active':'' }}">
               <i class="nav-icon fas fa-images"></i>
               <p>
                 Booking
@@ -64,6 +64,18 @@
                   <p>Booking List</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{url('rentalbooking/create')}}" class="nav-link {{ Request::path() == 'rentalbooking/create' ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>New Rental Booking</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{url('rentalbooking')}}" class="nav-link {{ Request::path() == 'rentalbooking' ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Rental Booking List</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item">
@@ -82,6 +94,12 @@
             <a href="{{url('dreamcontent')}}" class="nav-link {{ Request::path() == 'dreamcontent' ? 'active' : '' }}">
               <i class="nav-icon fas fa-igloo"></i>
               <p>Dream Content</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{url('videoscontent')}}" class="nav-link {{ Request::path() == 'videoscontent' ? 'active' : '' }}">
+              <i class="nav-icon fas fa-igloo"></i>
+              <p>Video Content</p>
             </a>
           </li>
           
@@ -142,7 +160,7 @@
             <a href="#" class="nav-link {{ in_array(Request::path(),array('roominfo','roomdetail','room'))?'active':'' }}">
               <i class="nav-icon fas fa-table"></i>
               <p>
-                Room Info
+                Rental Info
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -150,31 +168,27 @@
               <li class="nav-item">
                 <a href="{{url('roominfo')}}" class="nav-link {{ Request::path() == 'roominfo' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Room Section Settings</p>
+                  <p>Rental Section Settings</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{url('roomdetail')}}" class="nav-link {{ Request::path() == 'roomdetail' ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Site Room Details</p>
+                  <p>Site Rental Details</p>
                 </a>
               </li>
-              {{-- <li class="nav-item">
-                <a href="{{url('room')}}" class="nav-link {{ Request::path() == 'room' ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Booking Room Details</p>
+              <li class="nav-item">
+                <a href="{{url('rentalservice')}}" class="nav-link {{ Request::path() == 'rentalservice' ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-phone-square-alt"></i>
+                  <p>Rental Service Price</p>
                 </a>
-              </li> --}}
+              </li>
+              
               
             </ul>
           </li>
 
-          <li class="nav-item">
-            <a href="{{url('rentalservice')}}" class="nav-link {{ Request::path() == 'rentalservice' ? 'active' : '' }}">
-              <i class="nav-icon fas fa-phone-square-alt"></i>
-              <p>Rental Service</p>
-            </a>
-          </li>
+          
           <li class="nav-item has-treeview {{ in_array(Request::path(),array('sitesetting','fottermenu','topmenu','fotterpagecontent','cardpointestoresetting'))?'menu-open':'' }}">
             <a href="#" class="nav-link {{ in_array(Request::path(),array('sitesetting','fottermenu','topmenu','fotterpagecontent','cardpointestoresetting'))?'active':'' }}">
               <i class="nav-icon fas fa-cogs"></i>

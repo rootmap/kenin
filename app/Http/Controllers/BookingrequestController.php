@@ -344,7 +344,8 @@ class BookingRequestController extends Controller
     public function show(BookingRequest $bookingrequest)
     {
         
-        $tab=BookingRequest::all();return view('admin.pages.bookingrequest.bookingrequest_list',['dataRow'=>$tab]);
+        $tab=BookingRequest::all();
+        return view('admin.pages.bookingrequest.bookingrequest_list',['dataRow'=>$tab]);
     }
 
     /**
@@ -357,7 +358,13 @@ class BookingRequestController extends Controller
     {
         $tab=BookingRequest::find($id); 
         $tab_Room=Room::all();     
-        return view('admin.pages.bookingrequest.bookingrequest_edit',['dataRow_Room'=>$tab_Room,'dataRow'=>$tab,'edit'=>true]);  
+        $bookingConfiguration=BookingConfiguration::orderBy('id','DESC')->first();  
+        return view('admin.pages.bookingrequest.bookingrequest_edit',[
+            'dataRow_Room'=>$tab_Room,
+            'dataRow'=>$tab,
+            'edit'=>true,
+            'bookingConfiguration'=>$bookingConfiguration,
+            ]);  
     }
 
     /**
@@ -610,7 +617,7 @@ class BookingRequestController extends Controller
                 die();
 
         }else{
-
+            $amount=number_format($amount,2);
             $storeMerchantSet=CardpointeStoreSetting::orderBy('id','DESC')->first();
 
             $merchant_id = $storeMerchantSet->merchant_id;
@@ -690,7 +697,7 @@ class BookingRequestController extends Controller
         $cc_number=str_replace(" ","",$cc_number);
 
         $expiry=$request->cc_month."".$request->cc_year;
-        $amount=$request->amount_paid;
+        $amount=number_format($request->amount_paid,2);
         $cc_name=$request->cc_name;
 
         $booking_id=time();
@@ -702,7 +709,7 @@ class BookingRequestController extends Controller
                 die();
 
         }else{
-
+            
             $storeMerchantSet=CardpointeStoreSetting::orderBy('id','DESC')->first();
 
             $merchant_id = $storeMerchantSet->merchant_id;
@@ -807,6 +814,8 @@ class BookingRequestController extends Controller
                 die();
 
         }else{
+            
+            $amount=number_format($amount,2);
 
             $storeMerchantSet=CardpointeStoreSetting::orderBy('id','DESC')->first();
 
@@ -980,5 +989,8 @@ class BookingRequestController extends Controller
 
         $tab=BookingRequest::find($id);
         $tab->delete();
-        return redirect('bookingrequest')->with('status','Deleted Successfully !');}
+        return redirect('bookingrequest')->with('status','Deleted Successfully !');
+        
+        
+    }
 }

@@ -54,6 +54,23 @@ class FrontServiceController extends Controller
         $tab->save();
     }
 
+    private function duration($date_begin,$date_end)
+    {
+        $d1= new \DateTime($date_begin); 
+        $d2= new \DateTime($date_end);
+        $interval= $d1->diff($d2);
+
+        $days_extra=0;
+        if($interval->h > 0)
+        {
+            $days_extra=1;
+        }
+
+        //$hours=($interval->days * 24) + $days_extra;
+        $hours=$interval->days + $days_extra;
+        return $hours;
+    }
+
     public function booking($arrival='',$departure='',$adult='',$children=''){
 
         $country=Country::select('id','name','code')->orderBy('id','ASC')->get();
@@ -62,14 +79,18 @@ class FrontServiceController extends Controller
         $slider=Slider::orderBy('id','DESC')->first();
         
         // $bookingCount=BookingRequest::whereDate('created_at',$arrival)->count();
-
+        $bookingConfiguration=BookingConfiguration::orderBy('id','DESC')->first(); 
+        $day_rent=$bookingConfiguration->resort_daily_rent;
+        $total_hours=$this->duration($arrival,$departure);
+        $totalRentToPay=$day_rent*$total_hours;
         $data=[
             'slider'=>$slider,
             'arrival'=>$arrival,
             'departure'=>$departure,
             'adult'=>$adult,
             'children'=>$children,
-            'country'=>$country
+            'country'=>$country,
+            'totalRentToPay'=>$totalRentToPay,
 
         ];
 

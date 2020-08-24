@@ -364,6 +364,7 @@ class VideosContentController extends Controller
                 'section_title'=>'required',
                 'section_button_text'=>'required',
                 'section_button_url'=>'required',
+                'section_video_mp4'=>'required',
                 'module_status'=>'required',
         ]);
 
@@ -379,26 +380,6 @@ class VideosContentController extends Controller
         }
 
                 
-
-        $filename_videoscontent_5=$request->ex_section_video_mp4;
-        if ($request->hasFile('section_video_mp4')) {
-            $img_videoscontent = $request->file('section_video_mp4');
-            $upload_videoscontent = 'upload/videoscontent';
-            $filename_videoscontent_5 = env('APP_NAME').'_'.time() . '.' . $img_videoscontent->getClientOriginalExtension();
-            $img_videoscontent->move($upload_videoscontent, $filename_videoscontent_5);
-        }
-
-                
-
-        $filename_videoscontent_6=$request->ex_section_video_webm;
-        if ($request->hasFile('section_video_webm')) {
-            $img_videoscontent = $request->file('section_video_webm');
-            $upload_videoscontent = 'upload/videoscontent';
-            $filename_videoscontent_6 = env('APP_NAME').'_'.time() . '.' . $img_videoscontent->getClientOriginalExtension();
-            $img_videoscontent->move($upload_videoscontent, $filename_videoscontent_6);
-        }
-
-                
         $tab=VideosContent::find($id);
         
         $tab->section_sub_title=$request->section_sub_title;
@@ -406,8 +387,7 @@ class VideosContentController extends Controller
         $tab->section_button_text=$request->section_button_text;
         $tab->section_button_url=$request->section_button_url;
         $tab->section_foreground_image=$filename_videoscontent_4;
-        $tab->section_video_mp4=$filename_videoscontent_5;
-        $tab->section_video_webm=$filename_videoscontent_6;
+        $tab->section_video_mp4=$request->section_video_mp4;
         $tab->module_status=$request->module_status;
         $tab->save();
 

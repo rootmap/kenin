@@ -92,6 +92,9 @@ $(document).ready(function () {
         inline:false,
         defaultDate: dateToday,
         minDate: dateToday,
+        allowTimes:[
+            '12:00'
+           ]
     });
     var selectedDate = '';
     
@@ -100,6 +103,9 @@ $(document).ready(function () {
         format:'Y-m-d H:i',
         inline:false,
         minDate: dateToday,
+        allowTimes:[
+            '12:00'
+           ],
         onClose: function( selectedDate ) {
             var dateToday = new Date(); 
             $("#datetimepicker" ).datetimepicker({maxDate:selectedDate,minDate:dateToday});
@@ -113,12 +119,18 @@ $(document).ready(function () {
         inline:false,
         defaultDate: dateToday,
         minDate: dateToday,
+        allowTimes:[
+            '12:00'
+           ]
     });
 
     $('#datetimepicker4').datetimepicker({
         format:'Y-m-d H:i',
         inline:false,
         minDate: dateToday,
+        allowTimes:[
+            '12:00'
+           ],
         onClose: function( selectedDate ) {
             var dateToday = new Date(); 
             $("#datetimepicker3" ).datetimepicker({maxDate:selectedDate,minDate:dateToday});

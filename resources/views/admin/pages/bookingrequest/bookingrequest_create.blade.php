@@ -329,7 +329,7 @@
                         </div>
                            
             </div>
-            <input type="hidden" class="price_book" value="{{$bookingConfiguration->resort_daily_rent}}" />
+            {{-- <input type="hidden" class="price_book" value="{{$bookingConfiguration->resort_daily_rent}}" /> --}}
             <input type="hidden" class="payment_json" value="" />
             <input type="hidden" class="payment_status" value="0" />
             <input type="hidden" class="temporary_id" value="{{Session::get('booking_id')}}" />
@@ -429,6 +429,15 @@
 @section("css")
     <link rel="stylesheet" href="{{url('admin/plugins/daterangepicker/daterangepicker.css')}}">
     <link rel="stylesheet" href="{{url('admin/plugins/select2/css/select2.min.css')}}">
+    <style type="text/css">
+    .hourselect option:nth-child(-n+11) {
+        display: none;
+    }
+    
+    .hourselect option:nth-child(n+19) {
+        display: none;
+    }
+    </style>
 @endsection
         
 @section("js")
@@ -439,6 +448,35 @@
     <script>
     var csrftLarVe = $('meta[name="csrf-token"]').attr("content");
     var chargePayment = "{{url('bookingrequest/capture/payment')}}";
+    
+    function diff_hours() 
+    {
+      var arrival_date=$('input[name=arrival_date]').val();
+      var departure_date=$('input[name=departure_date]').val();
+      var start = Date.parse(arrival_date); //get timestamp
+
+      //value end
+      var end = Date.parse(departure_date); //get timestamp
+
+      totalHours = 0;
+      if (start < end) {
+        totalHours = Math.floor((end - start) / 1000 / 60 / 60); //milliseconds: /1000 / 60 / 60
+      }
+      var getDayWithFraction=(totalHours/24);
+      var getClearDay=Math.floor(getDayWithFraction);
+      var checkMaxFrac=getDayWithFraction-getClearDay;
+      var additionalDay=0;
+      if(checkMaxFrac>0)
+      {
+        additionalDay=1;
+      }
+
+      var totalDay=(getClearDay-0)+(additionalDay-0);
+
+      console.log('Diff Hour =',totalDay);
+
+      return totalDay;
+    }
 
     function refreshSerial(){
         var r=1;
@@ -451,14 +489,22 @@
 
     function getTotalBook(){
       var total=0;
-      $('body').find('.price_book').each(function(key,row){
-          total+=($(this).val()-0);
-      });
-      
-      console.log('total',total);
+        $('body').find('.price_book').each(function(key,row){
+            total+=($(this).val()-0);
+        });
+        
+        console.log('total=',total);
 
-      $("#totalMadePay").html(total);
-      $("input[name=amount_paid]").val(total);
+        var totalHours=diff_hours();
+        console.log('totalHours=',total);
+        console.log('Clear Day = ',totalHours);
+        var totalRent="{{$bookingConfiguration->resort_daily_rent}}";
+        var totalRentToPay=parseFloat(totalRent*totalHours);
+        console.log('totalRent * totalHours=',totalRentToPay);
+        totalRentToPay+=parseFloat(total-0);
+        console.log('Writing Price = ',totalRentToPay);
+        $("#totalMadePay").html(totalRentToPay);
+        $("input[name=amount_paid]").val(totalRentToPay);
     }
 
 
@@ -481,8 +527,13 @@
     }
 
     function loadPayment(){
-        $("#modal-md").modal('show');
+
         getTotalBook();
+        setInterval(() => {
+          getTotalBook();
+        }, 5000);
+        $("#modal-md").modal('show');
+        
     }
 
     function swalErrorMsg(msg) {
@@ -641,11 +692,15 @@
     });
 
     $('.dateTimePick').daterangepicker({
-      timePicker: true,
+      
       singleDatePicker: true,
-      timePickerIncrement: 60,
+      timePickerIncrement:60,
+      timePickerSeconds:false,
+      maxHour:12,
+
+      timePicker: true,
       locale: {
-        format: 'YYYY-MM-DD hh:mm'
+        format: 'YYYY-MM-DD hh:mm:ss a'
       }
     })
     </script>

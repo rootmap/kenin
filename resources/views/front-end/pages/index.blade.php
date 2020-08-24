@@ -92,24 +92,48 @@
         </div>
         @endif
     @endisset
+
+    <style type="text/css">
+    .playpause {
+        background-image:url('{{asset('images/play-vimeo.png')}}');
+        background-repeat:no-repeat;
+        width:30%;
+        height:30%;
+        position:absolute;
+        left:0%;
+        right:0%;
+        top:0%;
+        bottom:0%;
+        margin:auto;
+        background-size:contain;
+        background-position: center;
+        cursor: pointer;
+        text-decoration:none;
+      }
+
+      .playpause:hover {
+        opacity: 0.50;
+        cursor: pointer;
+      }
+    </style>
     
     @isset($video)
         @if ($video->module_status="Active")
-        <section id="video" class="video-section">
+        <section id="video" class="video-section" style="background: url({{asset('upload/videoscontent/'.$video->section_foreground_image)}}); background-size:cover;">
             {{-- <div class="video-content">
                 <h5 class="gray">{{$video->section_sub_title}}</h5>
                 <h3>{{$video->section_title}}</h3><a href="{{url('/'.$video->section_button_url)}}" class="book-now-button w-button">{{$video->section_button_text}}</a>
             </div> --}}
-            <div data-poster-url="{{asset('upload/videoscontent/'.$video->section_foreground_image)}}" 
-                data-video-urls="{{asset('upload/videoscontent/'.$video->section_video_mp4)}},{{asset('upload/videoscontent/'.$video->section_video_webm)}}" 
-                data-autoplay="true" data-loop="true" data-wf-ignore="true" 
-                class="background-video w-background-video w-background-video-atom">
-                    <video autoplay="" loop="" 
+            
+            <div class="background-video w-background-video w-background-video-atom">
+                    {{-- <video autoplay="" loop="" 
                     style="background-image:url(&quot;{{asset('upload/videoscontent/'.$video->section_foreground_image)}}&quot;)" 
                     muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
                         <source src="{{asset('upload/videoscontent/'.$video->section_video_mp4)}}" data-wf-ignore="true">
                         <source src="{{asset('upload/videoscontent/'.$video->section_video_webm)}}" data-wf-ignore="true">
-                    </video>
+                    </video> --}}
+
+                    <a class="playpause"  data-fancybox href="{{$video->section_video_mp4}}"></a>
             </div>
         </section>
         @endif
@@ -261,7 +285,32 @@
 @endsection
 
 @section('js')
-    <script>
+    <!-- Add fancyBox -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.6/dist/jquery.fancybox.min.js"></script>
+
+<!-- Optionally add helpers - button, thumbnail and/or media -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.6/dist/jquery.fancybox.min.css" type="text/css" media="screen" />
+<script>
+
+$(document).ready(function(){
+  $('.playpause').fancybox({
+      caption : function( instance, item ) {
+        return '';
+      }
+    });
+
+    // $('a.playpause').click(function() {
+      
+    //     $.fancybox.open({toolbar  : false,type: 'iframe', href: $(this).attr('href'), openEffect: 'none', closeEffect: 'none', padding: 0, height: 450, helpers: {media: {}}, afterShow: function() {
+    //       this.content.find('video').trigger('play'),
+    //       setTimeout(function() {
+    //         $('div.fancybox-close').animate({right: -42}, 500, 'easeOutBounce');
+    //       }, 300);
+    //     }});
+    //     return false;
+    //   });
+
+    });
 
       $(document).ready(function(e){
           $.getScript("https://cdn.jsdelivr.net/npm/sweetalert2@9");

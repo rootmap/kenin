@@ -537,7 +537,7 @@
                                 <i class="credit card alternative icon"></i> Processing please wait...
                               </button>
                               <a class="ui basic black left pointing label">
-                                $ 1
+                                $ {{$totalRentToPay}}
                               </a>
                             </div>
                         </div>

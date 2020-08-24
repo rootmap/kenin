@@ -135,44 +135,26 @@
                                 @endif
                             </div>
                         </div>
+
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Choose Section Video Mp4</label>
+                                    <label>Enter Video URL</label>
                                     <!-- <label for="customFile">Choose Section Video Mp4</label> -->
-                                    <div class="custom-file">
-                                      <input type="file" class="custom-file-input"  id="section_video_mp4" name="section_video_mp4">
-                                      <input type="hidden" value="{{$dataRow->section_video_mp4}}" name="ex_section_video_mp4" />
-                                      <label class="custom-file-label" for="customFile">Choose Section Video Mp4</label>
-                                    </div>
+                                    <input type="text" 
+                                    <?php 
+                                    if(isset($dataRow->section_video_mp4)){
+                                        ?>
+                                        value="{{$dataRow->section_video_mp4}}" 
+                                        <?php 
+                                    }
+                                    ?>
+                                    
+                                    class="form-control" placeholder="Enter Section Button URL" id="section_video_mp4" name="section_video_mp4">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <a href="{{url('upload/videoscontent/'.$dataRow->section_video_mp4)}}" class="btn btn-primary">
-                                    <i class="fas fa-download"></i> 
-                                    Download / Open File
-                                </a>
-                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Choose Section Video Webm</label>
-                                    <!-- <label for="customFile">Choose Section Video Webm</label> -->
-                                    <div class="custom-file">
-                                      <input type="file" class="custom-file-input"  id="section_video_webm" name="section_video_webm">
-                                      <input type="hidden" value="{{$dataRow->section_video_webm}}" name="ex_section_video_webm" />
-                                      <label class="custom-file-label" for="customFile">Choose Section Video Webm</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="{{url('upload/videoscontent/'.$dataRow->section_video_webm)}}" class="btn btn-primary">
-                                    <i class="fas fa-download"></i> 
-                                    Download / Open File
-                                </a>
-                            </div>
-                        </div>
+
         <div class="row">
             <div class="col-sm-12">
               <!-- radio -->

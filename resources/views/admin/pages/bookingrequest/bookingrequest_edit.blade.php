@@ -202,8 +202,8 @@
                                                                 <td>{{$key+1}}</td>
                                                                 <td>{{$item->rental_name}}</td>
                                                                 <td>
-                                                                    {{$item->rental_price}}
-                                                                </td>
+                                                                    <input type="hidden"  style="price_book" value="{{$item->rental_price}}" />
+                                                                    {{$item->rental_price}}</td>
                                                             </tr>
                                                         @endforeach
                                         
@@ -877,7 +877,7 @@
               </a>
               <a class="btn btn-warning" href="{{url('bookingrequest/takepayment/'.$dataRow->id)}}">
                 <i class="far fa-credit-card"></i> 
-                Take Payment & Confirm Booking
+                Take Payment & Confirm Booking | $<span id="bookingRequestPrice">{{$bookingConfiguration->resort_daily_rent}}</span>
               </a>
             </div>
           </form>
@@ -894,14 +894,76 @@
 @section("css")
     
     <link rel="stylesheet" href="{{url('admin/plugins/select2/css/select2.min.css')}}">
-    
+    <style type="text/css">
+        .hourselect option:nth-child(-n+11) {
+            display: none;
+        }
+        
+        .hourselect option:nth-child(n+19) {
+            display: none;
+        }
+        </style>
 @endsection
         
 @section("js")
 
     <script src="{{url('admin/plugins/select2/js/select2.full.min.js')}}"></script>
     <script>
+    function diff_hours() 
+    {
+      var arrival_date=$('input[name=arrival_date]').val();
+      var departure_date=$('input[name=departure_date]').val();
+      var start = Date.parse(arrival_date); //get timestamp
+      //value end
+      var end = Date.parse(departure_date); //get timestamp
+
+      totalHours = 0;
+      if (start < end) {
+        totalHours = Math.floor((end - start) / 1000 / 60 / 60); //milliseconds: /1000 / 60 / 60
+      }
+      var getDayWithFraction=(totalHours/24);
+      var getClearDay=Math.floor(getDayWithFraction);
+      var checkMaxFrac=getDayWithFraction-getClearDay;
+      var additionalDay=0;
+      if(checkMaxFrac>0)
+      {
+        additionalDay=1;
+      }
+
+      var totalDay=(getClearDay-0)+(additionalDay-0);
+
+      console.log('Diff Hour =',totalDay);
+
+      return totalDay;
+    }
+
+    function getTotalBook(){
+      var total=0;
+        $('body').find('.price_book').each(function(key,row){
+            console.log('working');
+            total+=($(this).val()-0);
+        });
+        
+        console.log('total=',total);
+
+        var totalHours=diff_hours();
+        console.log('totalHours=',total);
+        console.log('Clear Day = ',totalHours);
+        if(totalHours==0)
+        {
+            totalHours=1;
+        }
+        var totalRent="{{$bookingConfiguration->resort_daily_rent}}";
+        var totalRentToPay=parseFloat(totalRent*totalHours);
+        console.log('totalRent * totalHours=',totalRentToPay);
+        totalRentToPay+=parseFloat(total-0);
+        console.log('Writing Price = ',totalRentToPay);
+        $("#bookingRequestPrice").html(totalRentToPay);
+    }
+
+    getTotalBook();
     $(document).ready(function(){
+        getTotalBook();
         $(".select2").select2();
     });
     </script>
