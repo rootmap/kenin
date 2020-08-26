@@ -90,7 +90,6 @@ $(document).ready(function () {
     $('#datetimepicker').datetimepicker({
         format:'Y-m-d H:i',
         inline:false,
-        defaultDate: dateToday,
         minDate: dateToday,
         allowTimes:[
             '12:00'
@@ -117,7 +116,6 @@ $(document).ready(function () {
     $('#datetimepicker3').datetimepicker({
         format:'Y-m-d H:i',
         inline:false,
-        defaultDate: dateToday,
         minDate: dateToday,
         allowTimes:[
             '12:00'
