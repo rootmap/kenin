@@ -77,9 +77,7 @@ function KeninformateDateTime(keninTime){
     var dateString =
         m.getUTCFullYear() + "-" +
         ("0" + (m.getMonth()+1)).slice(-2) + "-" +
-        ("0" + m.getDate()).slice(-2) + " " +
-        ("0" + m.getHours()).slice(-2) + ":" +
-        ("0" + m.getMinutes()).slice(-2);
+        ("0" + m.getDate()).slice(-2) + " 12:00";
     console.log(dateString);
     return dateString;
     
@@ -93,7 +91,11 @@ $(document).ready(function () {
         minDate: dateToday,
         allowTimes:[
             '12:00'
-           ]
+        ],
+        onClose: function( selectedDate ) {
+            var keninTime=KeninformateDateTime(selectedDate);
+            $('#datetimepicker').val(keninTime);
+        }
     });
     var selectedDate = '';
     
@@ -105,11 +107,12 @@ $(document).ready(function () {
         allowTimes:[
             '12:00'
            ],
-        onClose: function( selectedDate ) {
+           onClose: function( selectedDate ) {
             var dateToday = new Date(); 
             $("#datetimepicker" ).datetimepicker({maxDate:selectedDate,minDate:dateToday});
             var keninTime=KeninformateDateTime(selectedDate);
             $('#datetimepicker4').val(keninTime);
+            $('#datetimepicker2').val(keninTime);
         }
     });
 
@@ -119,7 +122,12 @@ $(document).ready(function () {
         minDate: dateToday,
         allowTimes:[
             '12:00'
-           ]
+        ],
+        onClose: function( selectedDate ) {
+            var keninTime=KeninformateDateTime(selectedDate);
+            $('#datetimepicker').val(keninTime);
+            $('#datetimepicker3').val(keninTime);
+        }
     });
 
     $('#datetimepicker4').datetimepicker({
@@ -128,12 +136,13 @@ $(document).ready(function () {
         minDate: dateToday,
         allowTimes:[
             '12:00'
-           ],
+        ],
         onClose: function( selectedDate ) {
             var dateToday = new Date(); 
             $("#datetimepicker3" ).datetimepicker({maxDate:selectedDate,minDate:dateToday});
             var keninTime=KeninformateDateTime(selectedDate);
             $('#datetimepicker2').val(keninTime);
+            $('#datetimepicker4').val(keninTime);
         }
     });
 });
